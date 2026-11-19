@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>台股市場溫度計：七大過熱指標檢核</title>
+  <title>台股市場過熱指標儀表板</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,19 +23,19 @@
           🌡️
         </div>
         <div>
-          <h1 class="text-base sm:text-lg font-bold tracking-tight">台股市場溫度計：七大過熱指標檢核</h1>
-          <p class="text-xs text-slate-400">源自《雷浩斯 2026 下半年投資布局公開課》七大市場過熱警訊（4 項客觀市場指標 ＋ 3 項群眾心理指標）</p>
+          <h1 class="text-base sm:text-lg font-bold tracking-tight">台股市場過熱指標儀表板</h1>
+          <p class="text-xs text-slate-400">四大維度 × 八大客觀量化指標（估值・總經・技術廣度・籌碼熱度）｜資料基準日：2026-11-19</p>
         </div>
       </div>
       <div class="flex items-center gap-2 flex-wrap">
-        <span id="header-temp-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-200 border border-emerald-400/30">
-          1.5 / 7 燈 · 24°C · 理性冷靜區
+        <span id="header-temp-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-200 border border-amber-400/30">
+          4.0 / 8 燈 · 60°C · 溫熱分化區
         </span>
-        <button id="btn-preset-730" type="button" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-rose-900/70 hover:bg-rose-800 text-rose-100 border border-rose-700/80 transition">
-          載入 7/30 峰值 (7/7 燈)
+        <button id="btn-preset-peak" type="button" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-rose-900/70 hover:bg-rose-800 text-rose-100 border border-rose-700/80 transition">
+          載入 2026/10 過熱峰值 (8/8 燈)
         </button>
         <button id="btn-reset-live" type="button" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
-          重置 11/19 實況
+          重置 2026/11 最新實況
         </button>
         <button id="btn-download-index" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white border border-indigo-500 transition">
           ⬇ 下載 index.html
@@ -47,77 +47,89 @@
   <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
     <div id="toast" class="hidden fixed bottom-5 right-5 z-50 bg-slate-900 text-white text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-lg border border-slate-700"></div>
 
-    <!-- Top 3 KPI Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <!-- Top 4 KPI Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="bg-white rounded-2xl p-4 border border-slate-200 card-shadow">
         <div class="flex items-center justify-between text-xs text-slate-500 mb-1">
-          <span>過熱警訊總分 (0–7 燈)</span>
+          <span>過熱綜合得分 (0–8 燈)</span>
           <span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-medium">自動判分</span>
         </div>
         <div class="flex items-baseline gap-2">
-          <span id="kpi-score" class="text-3xl font-extrabold text-emerald-600">1.5</span>
-          <span class="text-sm text-slate-500">/ 7.0 燈</span>
-          <span id="kpi-temp-pill" class="ml-auto px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">24°C</span>
+          <span id="kpi-score" class="text-3xl font-extrabold text-amber-600">4.0</span>
+          <span class="text-sm text-slate-500">/ 8.0 燈</span>
+          <span id="kpi-temp-pill" class="ml-auto px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">60°C</span>
         </div>
-        <p id="kpi-regime-text" class="text-xs font-semibold text-slate-700 mt-1.5">理性冷靜區（溫度計讀數 24°C / 120°C）</p>
+        <p id="kpi-regime-text" class="text-xs font-semibold text-slate-700 mt-1.5">溫熱分化區（長線總經估值仍熱，短線技術籌碼已降溫）</p>
       </div>
 
       <div class="bg-white rounded-2xl p-4 border border-slate-200 card-shadow">
         <div class="flex items-center justify-between text-xs text-slate-500 mb-1.5">
           <span>燈號分布統計 (紅 / 黃 / 綠)</span>
-          <span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-medium">共 7 項</span>
+          <span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-medium">共 8 項</span>
         </div>
         <div id="kpi-light-counts" class="flex items-center gap-2 flex-wrap">
-          <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-sm font-bold bg-rose-100 text-rose-800">0 紅</span>
-          <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-sm font-bold bg-amber-100 text-amber-800">3 黃</span>
-          <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-sm font-bold bg-emerald-100 text-emerald-800">4 綠</span>
+          <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-sm font-bold bg-rose-100 text-rose-800">3 紅</span>
+          <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-sm font-bold bg-amber-100 text-amber-800">2 黃</span>
+          <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-sm font-bold bg-emerald-100 text-emerald-800">3 綠</span>
         </div>
-        <p id="kpi-split-detail" class="text-xs text-slate-600 mt-2">客觀指標 1.5 / 4.0 ｜ 心理指標 0.0 / 3.0</p>
+        <p id="kpi-checked-summary" class="text-xs text-slate-600 mt-2">已人工覆核 0 / 8 項</p>
       </div>
 
       <div class="bg-white rounded-2xl p-4 border border-slate-200 card-shadow">
         <div class="flex items-center justify-between text-xs text-slate-500 mb-1">
-          <span>台積電 (2330) 本益比溫度</span>
-          <span id="kpi-tsmc-badge" class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-semibold">黃燈偏溫 (20–24.9x)</span>
+          <span>估值 ＋ 總經熱度（長線基期）</span>
+          <span id="kpi-long-badge" class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 font-semibold">高檔紅區</span>
         </div>
         <div class="flex items-baseline gap-2">
-          <span id="kpi-tsmc-pe" class="text-3xl font-extrabold text-slate-900">22.3x</span>
-          <span class="text-xs text-slate-500">本益比</span>
+          <span id="kpi-long-score" class="text-3xl font-extrabold text-slate-900">3.5</span>
+          <span class="text-sm text-slate-500">/ 4.0</span>
         </div>
-        <p id="kpi-tsmc-detail" class="text-xs text-slate-600 mt-1.5">股價 2,140 元 / EPS 96 元（過熱紅線：25–30 倍）</p>
+        <p id="kpi-long-detail" class="text-xs text-slate-600 mt-1.5">估值 1.5 / 2.0 ｜ 總經 2.0 / 2.0</p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-4 border border-slate-200 card-shadow">
+        <div class="flex items-center justify-between text-xs text-slate-500 mb-1">
+          <span>技術 ＋ 籌碼熱度（短線溫度）</span>
+          <span id="kpi-short-badge" class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold">降溫綠區</span>
+        </div>
+        <div class="flex items-baseline gap-2">
+          <span id="kpi-short-score" class="text-3xl font-extrabold text-slate-900">0.5</span>
+          <span class="text-sm text-slate-500">/ 4.0</span>
+        </div>
+        <p id="kpi-short-detail" class="text-xs text-slate-600 mt-1.5">技術廣度 0.0 / 2.0 ｜ 籌碼 0.5 / 2.0</p>
       </div>
     </div>
 
-    <!-- Charts Row: Gauge + 7 Signals Bar -->
+    <!-- Charts Row: Gauge + 8 Signals Bar -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       <div class="lg:col-span-5 bg-white rounded-2xl p-5 border border-slate-200 card-shadow flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between mb-2 gap-2">
             <div>
-              <h2 class="text-sm font-bold text-slate-900">市場溫度計儀表 (0°C 理性 → 120°C 極度過熱)</h2>
-              <p class="text-xs text-slate-500">對應簡報 P.08 市場溫度計（7/30 直播峰值達 ~110°C 警戒紅區）</p>
+              <h2 class="text-sm font-bold text-slate-900">台股市場溫度計 (0°C 理性 → 120°C 極度過熱)</h2>
+              <p class="text-xs text-slate-500">每 1.0 燈對應 15°C（2026/10 峰值達 8.0 燈 · 120°C）</p>
             </div>
-            <span id="gauge-zone-pill" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 shrink-0">24°C · 理性冷靜區</span>
+            <span id="gauge-zone-pill" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 shrink-0">60°C · 溫熱分化區</span>
           </div>
           <div class="relative h-56 w-full flex items-center justify-center">
             <canvas id="thermometerGaugeChart"></canvas>
           </div>
         </div>
         <div class="grid grid-cols-4 gap-1.5 text-center text-[11px] pt-2 border-t border-slate-100">
-          <div class="p-1.5 rounded-lg bg-emerald-50 text-emerald-800 font-semibold">0–30°C<br/>理性冷靜</div>
-          <div class="p-1.5 rounded-lg bg-amber-50 text-amber-800 font-semibold">31–60°C<br/>溫熱穩健</div>
-          <div class="p-1.5 rounded-lg bg-orange-50 text-orange-800 font-semibold">61–90°C<br/>過熱警戒</div>
-          <div class="p-1.5 rounded-lg bg-rose-50 text-rose-800 font-semibold">91–120°C<br/>極度過熱</div>
+          <div class="p-1.5 rounded-lg bg-emerald-50 text-emerald-800 font-semibold">0–30°C<br/>0–2 燈 · 理性冷靜</div>
+          <div class="p-1.5 rounded-lg bg-amber-50 text-amber-800 font-semibold">31–60°C<br/>2.5–4 燈 · 溫熱分化</div>
+          <div class="p-1.5 rounded-lg bg-orange-50 text-orange-800 font-semibold">61–90°C<br/>4.5–6 燈 · 過熱警戒</div>
+          <div class="p-1.5 rounded-lg bg-rose-50 text-rose-800 font-semibold">91–120°C<br/>6.5–8 燈 · 極度過熱</div>
         </div>
       </div>
 
       <div class="lg:col-span-7 bg-white rounded-2xl p-5 border border-slate-200 card-shadow flex flex-col justify-between">
         <div class="flex items-center justify-between mb-2 gap-2">
           <div>
-            <h2 class="text-sm font-bold text-slate-900">七大過熱警訊分布圖（4 項客觀市場指標 ＋ 3 項群眾心理指標）</h2>
-            <p class="text-xs text-slate-500">0 分＝理性綠燈 ｜ 0.5 分＝升溫／清洗黃燈 ｜ 1.0 分＝過熱紅燈</p>
+            <h2 class="text-sm font-bold text-slate-900">八大客觀過熱指標分布圖（0 綠燈 / 0.5 黃燈 / 1.0 紅燈）</h2>
+            <p class="text-xs text-slate-500">長線估值與總經（①–④） vs. 短線技術廣度與籌碼槓桿（⑤–⑧）</p>
           </div>
-          <span id="checklist-progress-badge" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-semibold shrink-0">已人工覆核 0 / 7 項</span>
+          <span id="checklist-progress-badge" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-semibold shrink-0">已人工覆核 0 / 8 項</span>
         </div>
         <div class="relative h-64 w-full">
           <canvas id="signalsBarChart"></canvas>
@@ -125,191 +137,243 @@
       </div>
     </div>
 
-    <!-- Interactive 7 Signals Checklist -->
+    <!-- Interactive 8 Objective Signals Checklist -->
     <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
         <div>
-          <h2 class="text-base font-bold text-slate-900">市場溫度計：七大過熱警訊逐項檢核表（即時輸入自動判燈）</h2>
-          <p class="text-xs text-slate-500">數值型指標（① 台積電 P/E、③ 上市融資餘額、④ 股王股價/千金股數）修改後自動判燈；心理與募資指標可三段切換並勾選人工覆核（自動保存於本機）</p>
+          <h2 class="text-base font-bold text-slate-900">八大客觀過熱指標檢核表（輸入官方最新數據自動判燈）</h2>
+          <p class="text-xs text-slate-500">全數指標皆採 TWSE 證交所、國發會 NDC、財經M平方與 Goodinfo 可查詢數值；修改即時計算並自動保存於本機</p>
         </div>
         <div class="text-xs text-slate-600 shrink-0">
-          加權總分：<strong id="checklist-total-score" class="text-base text-slate-900">1.5</strong> / 7.0 燈
+          加權總分：<strong id="checklist-total-score" class="text-base text-slate-900">4.0</strong> / 8.0 燈
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="seven-signals-grid">
-        <!-- Signal 1: TSMC PE -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="eight-signals-grid">
+        <!-- Signal 1: Market PE -->
         <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-1">
           <div class="flex items-center justify-between gap-2">
-            <span class="text-xs font-bold text-indigo-700 uppercase">警訊 ① · 權值核心估值</span>
-            <span id="sig1-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">0.5 分 · 黃燈 (22.3x)</span>
+            <span class="text-xs font-bold text-indigo-700">指標 ① · 估值面 (TWSE)</span>
+            <span id="sig1-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">0.5 分 · 黃燈 (21.2x)</span>
           </div>
-          <h3 class="text-sm font-bold text-slate-900">台積電 (2330) 本益比飆升至 25–30 倍</h3>
-          <p class="text-xs text-slate-600">台積電為台股最大權值股；若本益比飆升至 25–30 倍，代表連權值龍頭都嚴重透支未來成長。</p>
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <label class="block">
-              <span class="text-slate-600 font-medium">台積電股價 (元)</span>
-              <input id="in-tsmc-price" type="number" step="10" value="2140" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
-            </label>
-            <label class="block">
-              <span class="text-slate-600 font-medium">預估 / TTM EPS (元)</span>
-              <input id="in-tsmc-eps" type="number" step="1" value="96" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+          <h3 class="text-sm font-bold text-slate-900">大盤本益比 (P/E Ratio)</h3>
+          <p class="text-xs text-slate-600">2026-11-19 大盤本益比約 21.2 倍（自 10 月底 24.92 倍回落）；台股歷史常態區間約 14–20 倍。</p>
+          <div class="text-xs">
+            <label class="block max-w-xs">
+              <span class="text-slate-600 font-medium">大盤本益比 (倍)</span>
+              <input id="in-pe" type="number" step="0.1" value="21.2" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
             </label>
           </div>
-          <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/80">
-            <span class="text-slate-500">門檻：&lt;20x 綠燈 ｜ 20–24.9x 黃燈 ｜ ≥25x 紅燈</span>
-            <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer shrink-0">
-              <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="1" />
-              <span>已檢視</span>
-            </label>
+          <div class="flex items-center justify-between gap-2 text-xs pt-1.5 border-t border-slate-200/80 flex-wrap">
+            <span class="text-slate-500">門檻：&lt;18x 綠 ｜ 18–22.9x 黃 ｜ ≥23x 紅</span>
+            <div class="flex items-center gap-3 shrink-0">
+              <a href="https://www.twse.com.tw" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 font-medium">TWSE 查詢 ↗</a>
+              <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer">
+                <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="1" />
+                <span>已檢視</span>
+              </label>
+            </div>
           </div>
         </div>
 
-        <!-- Signal 2: Active ETF -->
+        <!-- Signal 2: Market PB & Dividend Yield -->
         <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-2">
           <div class="flex items-center justify-between gap-2">
-            <span class="text-xs font-bold text-indigo-700 uppercase">警訊 ② · 資金募集熱度</span>
-            <span id="sig2-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">0 分 · 綠燈</span>
+            <span class="text-xs font-bold text-indigo-700">指標 ② · 估值面 (TWSE)</span>
+            <span id="sig2-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800">1.0 分 · 紅燈 (3.36x / 1.67%)</span>
           </div>
-          <h3 class="text-sm font-bold text-slate-900">主動式 ETF 募資狂熱</h3>
-          <p class="text-xs text-slate-600">投信密集推出主動式／高股息新 ETF、申購金額動輒創紀錄，且散戶出現解定存、借貸排隊搶募現象。</p>
-          <div class="grid grid-cols-3 gap-1.5 text-xs" id="sig2-btns">
-            <button type="button" data-sig="2" data-score="0" class="sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition">0 分<br/><span class="text-[10px] font-normal">理性常態</span></button>
-            <button type="button" data-sig="2" data-score="0.5" class="sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition">0.5 分<br/><span class="text-[10px] font-normal">局部話題</span></button>
-            <button type="button" data-sig="2" data-score="1" class="sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition">1.0 分<br/><span class="text-[10px] font-normal">募資狂熱</span></button>
-          </div>
-          <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/80">
-            <span class="text-slate-500">觀察指標：新募集規模、折溢價與媒體洗版度</span>
-            <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer shrink-0">
-              <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="2" />
-              <span>已檢視</span>
+          <h3 class="text-sm font-bold text-slate-900">大盤股價淨值比 (P/B) ＆ 現金殖利率</h3>
+          <p class="text-xs text-slate-600">2026-11 中旬 P/B 約 3.36 倍（10 月底 3.95 倍）、現金殖利率僅 ~1.67%（長期均值約 4%），估值與息率仍處高檔過熱區。</p>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <label class="block">
+              <span class="text-slate-600 font-medium">大盤 P/B (倍)</span>
+              <input id="in-pb" type="number" step="0.05" value="3.36" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
             </label>
+            <label class="block">
+              <span class="text-slate-600 font-medium">現金殖利率 (%)</span>
+              <input id="in-yield" type="number" step="0.05" value="1.67" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+            </label>
+          </div>
+          <div class="flex items-center justify-between gap-2 text-xs pt-1.5 border-t border-slate-200/80 flex-wrap">
+            <span class="text-slate-500">門檻：P/B ≥2.8x 或殖利率 ≤2.2% 亮紅燈</span>
+            <div class="flex items-center gap-3 shrink-0">
+              <a href="https://www.twse.com.tw" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 font-medium">TWSE 查詢 ↗</a>
+              <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer">
+                <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="2" />
+                <span>已檢視</span>
+              </label>
+            </div>
           </div>
         </div>
 
-        <!-- Signal 3: 4 Loans & Margin -->
+        <!-- Signal 3: NDC Monitoring Indicator -->
         <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-3">
           <div class="flex items-center justify-between gap-2">
-            <span class="text-xs font-bold text-indigo-700 uppercase">警訊 ③ · 籌碼槓桿風險</span>
-            <span id="sig3-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">0.5 分 · 黃燈 (5,080億)</span>
+            <span class="text-xs font-bold text-indigo-700">指標 ③ · 總經面 (國發會 NDC)</span>
+            <span id="sig3-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800">1.0 分 · 紅燈 (41分・紅燈)</span>
           </div>
-          <h3 class="text-sm font-bold text-slate-900">槓桿過度：「四貸同堂」（不限用途資金借貸）</h3>
-          <p class="text-xs text-slate-600">「房貸增貸＋信貸＋股票質押（不限用途借貸）＋融資」高相關性疊加。10 月底跨機構聯徵新制上線後，11 月中旬已見明顯去槓桿清洗。</p>
+          <h3 class="text-sm font-bold text-slate-900">國發會景氣對策信號（景氣燈號分數）</h3>
+          <p class="text-xs text-slate-600">最新公布 2026/09 為 41 分（連 10 紅創 1984 年以來紀錄）；10 月數據預計 11 月下旬發布。</p>
+          <div class="text-xs">
+            <label class="block max-w-xs">
+              <span class="text-slate-600 font-medium">景氣綜合判斷分數 (9–45 分)</span>
+              <input id="in-ndc-score" type="number" min="9" max="45" step="1" value="41" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+            </label>
+          </div>
+          <div class="flex items-center justify-between gap-2 text-xs pt-1.5 border-t border-slate-200/80 flex-wrap">
+            <span class="text-slate-500">門檻：&lt;32分 綠 ｜ 32–37分 黃紅燈 ｜ ≥38分 紅燈</span>
+            <div class="flex items-center gap-3 shrink-0">
+              <a href="https://index.ndc.gov.tw" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 font-medium">國發會查詢 ↗</a>
+              <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer">
+                <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="3" />
+                <span>已檢視</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Signal 4: Taiwan Buffett Indicator -->
+        <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-4">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-xs font-bold text-indigo-700">指標 ④ · 總經估值面 (財經M平方)</span>
+            <span id="sig4-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800">1.0 分 · 紅燈 (435%)</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900">台股巴菲特指標（總市值 ÷ 台灣 GDP）</h3>
+          <p class="text-xs text-slate-600">2026/11 約 435%（10 月高點逼近 500%）；因半導體權值股賺全球財，台股基準高於歐美 120% 傳統線，屬長期風險溫度計。</p>
+          <div class="text-xs">
+            <label class="block max-w-xs">
+              <span class="text-slate-600 font-medium">台股巴菲特指標 (%)</span>
+              <input id="in-buffett" type="number" step="5" value="435" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+            </label>
+          </div>
+          <div class="flex items-center justify-between gap-2 text-xs pt-1.5 border-t border-slate-200/80 flex-wrap">
+            <span class="text-slate-500">門檻：&lt;200% 綠 ｜ 200–299% 黃 ｜ ≥300% 紅（台股修正口徑）</span>
+            <div class="flex items-center gap-3 shrink-0">
+              <a href="https://www.macromicro.me" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 font-medium">M平方查詢 ↗</a>
+              <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer">
+                <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="4" />
+                <span>已檢視</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Signal 5: 240MA BIAS -->
+        <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-5">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-xs font-bold text-cyan-700">指標 ⑤ · 技術面 (TWSE / Goodinfo)</span>
+            <span id="sig5-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">0 分 · 綠燈 (-2.2%)</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900">加權指數年線乖離率 (240MA BIAS)</h3>
+          <p class="text-xs text-slate-600">11/19 收盤 38,427 點跌破 240 日年線（~39,300 點，乖離 -2.2%），自 10/06 高點 49,823 點（正乖離近 30%）大幅收斂。</p>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <label class="block">
+              <span class="text-slate-600 font-medium">加權指數 (點)</span>
+              <input id="in-taiex" type="number" step="50" value="38427" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+            </label>
+            <label class="block">
+              <span class="text-slate-600 font-medium">240 日年線 (點)</span>
+              <input id="in-ma240" type="number" step="50" value="39300" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+            </label>
+          </div>
+          <div class="flex items-center justify-between gap-2 text-xs pt-1.5 border-t border-slate-200/80 flex-wrap">
+            <span class="text-slate-500">門檻：&lt;+10% 綠 ｜ +10%–+19.9% 黃 ｜ ≥+20% 紅</span>
+            <div class="flex items-center gap-3 shrink-0">
+              <a href="https://goodinfo.tw" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 font-medium">Goodinfo ↗</a>
+              <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer">
+                <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="5" />
+                <span>已檢視</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Signal 6: Market Breadth > 200MA -->
+        <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-6">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-xs font-bold text-cyan-700">指標 ⑥ · 市場廣度 (財經M平方)</span>
+            <span id="sig6-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">0 分 · 綠燈 (28.8%)</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900">成分股站上 200 日均線比例</h3>
+          <p class="text-xs text-slate-600">2026/11 中旬滑落至 28.8%（跌破 30%），顯示多數個股已提前跌破年線完成技術降溫。</p>
+          <div class="text-xs">
+            <label class="block max-w-xs">
+              <span class="text-slate-600 font-medium">站上 200 日均線家數比例 (%)</span>
+              <input id="in-breadth200" type="number" min="0" max="100" step="0.5" value="28.8" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+            </label>
+          </div>
+          <div class="flex items-center justify-between gap-2 text-xs pt-1.5 border-t border-slate-200/80 flex-wrap">
+            <span class="text-slate-500">門檻：&lt;60% 綠 ｜ 60–74.9% 黃 ｜ ≥75% 紅</span>
+            <div class="flex items-center gap-3 shrink-0">
+              <a href="https://www.macromicro.me" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 font-medium">M平方查詢 ↗</a>
+              <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer">
+                <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="6" />
+                <span>已檢視</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Signal 7: Margin Balance & Maintenance Ratio -->
+        <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-7">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-xs font-bold text-cyan-700">指標 ⑦ · 籌碼槓桿面 (TWSE / 財經M平方)</span>
+            <span id="sig7-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">0 分 · 綠燈 (4,844億 / 154.4%)</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900">上市融資餘額 ＆ 融資維持率</h3>
+          <p class="text-xs text-slate-600">11/19 上市融資單日減 236.6 億至 4,844 億元（較 10/08 峰值 6,464 億明顯去槓桿）；上市櫃融資維持率約 154.4%。</p>
           <div class="grid grid-cols-2 gap-2 text-xs">
             <label class="block">
               <span class="text-slate-600 font-medium">上市融資餘額 (億元)</span>
-              <input id="in-margin-bal" type="number" step="100" value="5080" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+              <input id="in-margin-bal" type="number" step="50" value="4844" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
             </label>
             <label class="block">
-              <span class="text-slate-600 font-medium">市場四貸借貸熱度</span>
-              <select id="in-four-loans" class="mt-1 w-full px-2 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold">
-                <option value="cool">冷卻收緊（聯徵穿透＋去槓桿中）</option>
-                <option value="warm">局部活躍（質押/信貸併用）</option>
-                <option value="hot">極度狂熱（四貸同堂全開）</option>
-              </select>
+              <span class="text-slate-600 font-medium">融資維持率 (%)</span>
+              <input id="in-maint-ratio" type="number" step="0.5" value="154.4" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
             </label>
           </div>
-          <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/80">
-            <span class="text-slate-500">門檻：&lt;5,000 億綠 ｜ 5,000–5,799 億黃 ｜ ≥5,800 億或狂熱紅</span>
-            <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer shrink-0">
-              <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="3" />
-              <span>已檢視</span>
-            </label>
+          <p id="sig7-maint-note" class="hidden text-[11px] font-medium text-orange-700 bg-orange-50 border border-orange-200 rounded-lg px-2.5 py-1.5">
+            註：維持率偏低，短線留意接近 130% 追繳線之斷頭波動
+          </p>
+          <div class="flex items-center justify-between gap-2 text-xs pt-1.5 border-t border-slate-200/80 flex-wrap">
+            <span class="text-slate-500">門檻：≥5,800億或維持率 ≥175% 紅 ｜ ≥5,000億或 ≥165% 黃</span>
+            <div class="flex items-center gap-3 shrink-0">
+              <a href="https://www.twse.com.tw" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 font-medium">TWSE 查詢 ↗</a>
+              <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer">
+                <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="7" />
+                <span>已檢視</span>
+              </label>
+            </div>
           </div>
         </div>
 
-        <!-- Signal 4: 10k Stock King -->
-        <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-4">
+        <!-- Signal 8: Retail Share & Day Trading Ratio -->
+        <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-8">
           <div class="flex items-center justify-between gap-2">
-            <span class="text-xs font-bold text-indigo-700 uppercase">警訊 ④ · 高價股風險偏好</span>
-            <span id="sig4-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">0.5 分 · 黃燈 (8,730元)</span>
+            <span class="text-xs font-bold text-cyan-700">指標 ⑧ · 散戶投機熱度 (TWSE 月統計)</span>
+            <span id="sig8-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">0.5 分 · 黃燈 (50.7% / 38.4%)</span>
           </div>
-          <h3 class="text-sm font-bold text-slate-900">萬元股王現身，高價股暴增</h3>
-          <p class="text-xs text-slate-600">股王逼近或突破萬元且千金股遍地開花，代表資金風險偏好極端化。11/19 信驊跌停至 8,730 元、單日 20 檔千金股跌停洗牌。</p>
+          <h3 class="text-sm font-bold text-slate-900">自然人成交比重 ＆ 當沖成交占比</h3>
+          <p class="text-xs text-slate-600">證交所 2026/10 統計自然人成交占比 50.72%、當沖占比 38.38%、有交易戶數跳升至 629 萬戶，短線換手仍偏活絡。</p>
           <div class="grid grid-cols-2 gap-2 text-xs">
             <label class="block">
-              <span class="text-slate-600 font-medium">目前股王股價 (元)</span>
-              <input id="in-king-price" type="number" step="100" value="8730" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+              <span class="text-slate-600 font-medium">自然人成交比重 (%)</span>
+              <input id="in-retail-pct" type="number" step="0.5" value="50.7" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
             </label>
             <label class="block">
-              <span class="text-slate-600 font-medium">台股千金股家數 (檔)</span>
-              <input id="in-1k-count" type="number" step="1" value="18" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+              <span class="text-slate-600 font-medium">當沖成交占比 (%)</span>
+              <input id="in-daytrade-pct" type="number" step="0.5" value="38.4" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
             </label>
           </div>
-          <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/80">
-            <span class="text-slate-500">門檻：股王 ≥10,000 元或千金 ≥25 檔亮紅燈</span>
-            <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer shrink-0">
-              <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="4" />
-              <span>已檢視</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Signal 5: Extreme Greed -->
-        <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-5">
-          <div class="flex items-center justify-between gap-2">
-            <span class="text-xs font-bold text-rose-700 uppercase">警訊 ⑤ · 群眾心理 A</span>
-            <span id="sig5-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">0 分 · 綠燈</span>
-          </div>
-          <h3 class="text-sm font-bold text-slate-900">貪婪極端化：不滿足於上漲，渴求連續漲停</h3>
-          <p class="text-xs text-slate-600">投資人嫌棄穩健成長或緩漲行情，認為沒有連續漲停板就是浪費時間，追逐無基本面支撐的飆股。</p>
-          <div class="grid grid-cols-3 gap-1.5 text-xs" id="sig5-btns">
-            <button type="button" data-sig="5" data-score="0" class="sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition">0 分<br/><span class="text-[10px] font-normal">重視基本面</span></button>
-            <button type="button" data-sig="5" data-score="0.5" class="sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition">0.5 分<br/><span class="text-[10px] font-normal">羨慕短線飆股</span></button>
-            <button type="button" data-sig="5" data-score="1" class="sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition">1.0 分<br/><span class="text-[10px] font-normal">渴求連拉漲停</span></button>
-          </div>
-          <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/80">
-            <span class="text-slate-500">自我檢視：是否嫌棄年化 15%–20% 複利太慢？</span>
-            <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer shrink-0">
-              <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="5" />
-              <span>已檢視</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Signal 6: Blind Optimism -->
-        <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-6">
-          <div class="flex items-center justify-between gap-2">
-            <span class="text-xs font-bold text-rose-700 uppercase">警訊 ⑥ · 群眾心理 B</span>
-            <span id="sig6-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">0 分 · 綠燈</span>
-          </div>
-          <h3 class="text-sm font-bold text-slate-900">盲目樂觀：無法忍受任何悲觀與風險言論</h3>
-          <p class="text-xs text-slate-600">社群與媒體呈一言堂，「這次不一樣」當道，任何提醒估值過高或建議控管風險者皆遭嘲諷攻擊。</p>
-          <div class="grid grid-cols-3 gap-1.5 text-xs" id="sig6-btns">
-            <button type="button" data-sig="6" data-score="0" class="sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition">0 分<br/><span class="text-[10px] font-normal">正視風險言論</span></button>
-            <button type="button" data-sig="6" data-score="0.5" class="sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition">0.5 分<br/><span class="text-[10px] font-normal">偏多不願減碼</span></button>
-            <button type="button" data-sig="6" data-score="1" class="sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition">1.0 分<br/><span class="text-[10px] font-normal">排斥一切風險</span></button>
-          </div>
-          <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/80">
-            <span class="text-slate-500">當市場聽不進任何保守聲音時，往往接近反轉</span>
-            <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer shrink-0">
-              <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="6" />
-              <span>已檢視</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Signal 7: Performance Race -->
-        <div class="md:col-span-2 rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-7">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <span class="text-xs font-bold text-rose-700 uppercase">警訊 ⑦ · 群眾心理 C</span>
-              <h3 class="text-sm font-bold text-slate-900 mt-0.5">績效競賽：投資淪為比較，無法忍受賺得比別人少</h3>
+          <div class="flex items-center justify-between gap-2 text-xs pt-1.5 border-t border-slate-200/80 flex-wrap">
+            <span class="text-slate-500">門檻：自然人 ≥60% 或當沖 ≥42% 紅 ｜ ≥50% 或 ≥35% 黃</span>
+            <div class="flex items-center gap-3 shrink-0">
+              <a href="https://www.twse.com.tw" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 font-medium">TWSE 查詢 ↗</a>
+              <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer">
+                <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="8" />
+                <span>已檢視</span>
+              </label>
             </div>
-            <span id="sig7-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 self-start sm:self-center">0 分 · 綠燈</span>
-          </div>
-          <p class="text-xs text-slate-600">因 FOMO 焦慮與他人對帳單刺激，被迫在高檔放棄紀律，只為了追平短期報酬率而盲目追價。</p>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs" id="sig7-btns">
-            <button type="button" data-sig="7" data-score="0" class="sig-seg-btn px-3 py-2 rounded-lg font-semibold border transition">0 分 · 專注自身財務目標與複利紀律</button>
-            <button type="button" data-sig="7" data-score="0.5" class="sig-seg-btn px-3 py-2 rounded-lg font-semibold border transition">0.5 分 · 偶受社群對帳單干擾</button>
-            <button type="button" data-sig="7" data-score="1" class="sig-seg-btn px-3 py-2 rounded-lg font-semibold border transition">1.0 分 · 陷入績效比較焦慮、在高點加碼追價</button>
-          </div>
-          <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/80">
-            <span class="text-slate-500">自我檢視：是否因他人對帳單而在高檔焦慮追價？</span>
-            <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer shrink-0">
-              <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="7" />
-              <span>已檢視</span>
-            </label>
           </div>
         </div>
       </div>
@@ -317,36 +381,40 @@
   </main>
 
   <script>
-    const STORAGE_KEY = 'leihaos_tw_overheat_only_v2';
+    const STORAGE_KEY = 'tw_overheat_8indicators_v3';
 
-    const PRESET_LIVE_1119 = {
-      tsmcPrice: 2140,
-      tsmcEps: 96,
-      sig2Score: 0,
-      marginBal: 5080,
-      fourLoans: 'cool',
-      kingPrice: 8730,
-      count1k: 18,
-      sig5Score: 0,
-      sig6Score: 0,
-      sig7Score: 0
+    const PRESET_LIVE_202611 = {
+      pe: 21.2,
+      pb: 3.36,
+      divYield: 1.67,
+      ndcScore: 41,
+      buffett: 435,
+      taiex: 38427,
+      ma240: 39300,
+      breadth200: 28.8,
+      marginBal: 4844,
+      maintRatio: 154.4,
+      retailPct: 50.7,
+      daytradePct: 38.4
     };
 
-    const PRESET_730_PEAK = {
-      tsmcPrice: 2600,
-      tsmcEps: 95,
-      sig2Score: 1,
-      marginBal: 6200,
-      fourLoans: 'hot',
-      kingPrice: 10500,
-      count1k: 30,
-      sig5Score: 1,
-      sig6Score: 1,
-      sig7Score: 1
+    const PRESET_PEAK_202610 = {
+      pe: 24.9,
+      pb: 3.95,
+      divYield: 1.63,
+      ndcScore: 41,
+      buffett: 495,
+      taiex: 49823,
+      ma240: 38500,
+      breadth200: 82.0,
+      marginBal: 6464,
+      maintRatio: 178.0,
+      retailPct: 62.0,
+      daytradePct: 44.0
     };
 
     let state = {
-      ...PRESET_LIVE_1119,
+      ...PRESET_LIVE_202611,
       sigChecks: {}
     };
 
@@ -382,68 +450,99 @@
     }
 
     // ------------------------------------------------------------------
-    // OVERHEAT THERMOMETER SCORING ENGINE
+    // 8-INDICATOR OBJECTIVE OVERHEAT SCORING ENGINE
     // ------------------------------------------------------------------
-    function computeSignals() {
-      const pe = state.tsmcEps > 0 ? state.tsmcPrice / state.tsmcEps : 0;
-      const s1 = pe >= 25 ? 1 : (pe >= 20 ? 0.5 : 0);
-      const s2 = Number(state.sig2Score) || 0;
-
-      let s3 = 0;
-      if (state.marginBal >= 5800 || state.fourLoans === 'hot') {
-        s3 = 1;
-      } else if (state.marginBal >= 5000 || state.fourLoans === 'warm') {
-        s3 = 0.5;
-      }
-
-      let s4 = 0;
-      if (state.kingPrice >= 10000 || state.count1k >= 25) {
-        s4 = 1;
-      } else if (state.kingPrice >= 8000 || state.count1k >= 15) {
-        s4 = 0.5;
-      }
-
-      const s5 = Number(state.sig5Score) || 0;
-      const s6 = Number(state.sig6Score) || 0;
-      const s7 = Number(state.sig7Score) || 0;
-
-      const scores = [s1, s2, s3, s4, s5, s6, s7];
-      const total = scores.reduce((a, b) => a + b, 0);
-      const tempC = Math.round((total / 7) * 110);
-      return { pe, scores, total, tempC };
+    function getNdcLightName(score) {
+      if (score >= 38) return '紅燈';
+      if (score >= 32) return '黃紅燈';
+      if (score >= 23) return '綠燈';
+      if (score >= 17) return '黃藍燈';
+      return '藍燈';
     }
 
-    function getRegimeInfo(total, tempC) {
-      if (total <= 1.5) {
+    function computeSignals() {
+      // 1. P/E
+      const s1 = state.pe >= 23 ? 1 : (state.pe >= 18 ? 0.5 : 0);
+
+      // 2. P/B & Dividend Yield
+      const s2 = (state.pb >= 2.8 || state.divYield <= 2.2) ? 1 : ((state.pb >= 2.2 || state.divYield <= 3.0) ? 0.5 : 0);
+
+      // 3. NDC Economic Signal
+      const s3 = state.ndcScore >= 38 ? 1 : (state.ndcScore >= 32 ? 0.5 : 0);
+
+      // 4. Taiwan Buffett Indicator (Market Cap / GDP)
+      const s4 = state.buffett >= 300 ? 1 : (state.buffett >= 200 ? 0.5 : 0);
+
+      // 5. 240MA BIAS
+      const bias = state.ma240 > 0 ? ((state.taiex - state.ma240) / state.ma240) * 100 : 0;
+      const s5 = bias >= 20 ? 1 : (bias >= 10 ? 0.5 : 0);
+
+      // 6. Stocks above 200MA %
+      const s6 = state.breadth200 >= 75 ? 1 : (state.breadth200 >= 60 ? 0.5 : 0);
+
+      // 7. Margin Balance & Maintenance Ratio
+      const s7 = (state.marginBal >= 5800 || state.maintRatio >= 175) ? 1 : ((state.marginBal >= 5000 || state.maintRatio >= 165) ? 0.5 : 0);
+
+      // 8. Retail Share & Day-Trading Ratio
+      const s8 = (state.retailPct >= 60 || state.daytradePct >= 42) ? 1 : ((state.retailPct >= 50 || state.daytradePct >= 35) ? 0.5 : 0);
+
+      const scores = [s1, s2, s3, s4, s5, s6, s7, s8];
+      const total = scores.reduce((a, b) => a + b, 0);
+      const valTotal = s1 + s2;
+      const macroTotal = s3 + s4;
+      const techTotal = s5 + s6;
+      const chipTotal = s7 + s8;
+      const longTotal = valTotal + macroTotal;
+      const shortTotal = techTotal + chipTotal;
+      const tempC = Math.round((total / 8) * 120);
+
+      return { bias, scores, total, valTotal, macroTotal, techTotal, chipTotal, longTotal, shortTotal, tempC };
+    }
+
+    function getRegimeInfo(total, tempC, longTotal, shortTotal) {
+      if (total <= 2.0) {
         return {
           name: '理性冷靜區',
+          desc: `理性冷靜區（溫度計 ${tempC}°C / 120°C · 估值與籌碼風險偏低）`,
           badgeHeaderClass: 'bg-emerald-500/20 text-emerald-200 border-emerald-400/30',
           pillClass: 'bg-emerald-100 text-emerald-800',
           scoreColor: 'text-emerald-600'
         };
       }
-      if (total <= 3.5) {
+      if (total <= 4.0) {
+        const subText = (longTotal >= 3.0 && shortTotal <= 1.5)
+          ? '長線總經估值仍熱，短線技術籌碼已降溫'
+          : `溫度計 ${tempC}°C / 120°C · 處於溫和震盪區間`;
         return {
-          name: '溫熱穩健區',
+          name: '溫熱分化區',
+          desc: `溫熱分化區（${subText}）`,
           badgeHeaderClass: 'bg-amber-500/20 text-amber-200 border-amber-400/30',
           pillClass: 'bg-amber-100 text-amber-800',
           scoreColor: 'text-amber-600'
         };
       }
-      if (total <= 5.5) {
+      if (total <= 6.0) {
         return {
           name: '過熱警戒區',
+          desc: `過熱警戒區（溫度計 ${tempC}°C / 120°C · 多項指標進入警戒）`,
           badgeHeaderClass: 'bg-orange-500/20 text-orange-200 border-orange-400/30',
           pillClass: 'bg-orange-100 text-orange-800',
           scoreColor: 'text-orange-600'
         };
       }
       return {
-        name: '極度過熱危險區',
+        name: '極度過熱區',
+        desc: `極度過熱區（溫度計 ${tempC}°C / 120°C · 估值、總經與籌碼全面沸騰）`,
         badgeHeaderClass: 'bg-rose-500/20 text-rose-200 border-rose-400/30',
         pillClass: 'bg-rose-100 text-rose-800',
         scoreColor: 'text-rose-600'
       };
+    }
+
+    function getSubGroupBadge(score) {
+      if (score >= 3.0) return { label: '高檔紅區', cls: 'px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 font-semibold' };
+      if (score >= 1.5) return { label: '偏熱黃區', cls: 'px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-semibold' };
+      return { label: '降溫綠區', cls: 'px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold' };
     }
 
     function scoreBadgeMeta(score) {
@@ -500,16 +599,23 @@
       }
     };
 
+    function updateCheckedCountDisplays() {
+      const checkedCount = document.querySelectorAll('.sig-check:checked').length;
+      const text = `已人工覆核 ${checkedCount} / 8 項`;
+      document.getElementById('checklist-progress-badge').textContent = text;
+      document.getElementById('kpi-checked-summary').textContent = text;
+    }
+
     function renderThermometerViews() {
-      const { pe, scores, total, tempC } = computeSignals();
-      const regime = getRegimeInfo(total, tempC);
+      const { bias, scores, total, valTotal, macroTotal, techTotal, chipTotal, longTotal, shortTotal, tempC } = computeSignals();
+      const regime = getRegimeInfo(total, tempC, longTotal, shortTotal);
 
       // Header Badge
       const hBadge = document.getElementById('header-temp-badge');
-      hBadge.textContent = `${total.toFixed(1)} / 7 燈 · ${tempC}°C · ${regime.name}`;
+      hBadge.textContent = `${total.toFixed(1)} / 8 燈 · ${tempC}°C · ${regime.name}`;
       hBadge.className = `inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${regime.badgeHeaderClass}`;
 
-      // KPI 1: Score & Temperature
+      // KPI 1: Total Score & Temperature
       const kpiScore = document.getElementById('kpi-score');
       kpiScore.textContent = total.toFixed(1);
       kpiScore.className = `text-3xl font-extrabold ${regime.scoreColor}`;
@@ -517,36 +623,32 @@
       const kpiTempPill = document.getElementById('kpi-temp-pill');
       kpiTempPill.textContent = `${tempC}°C`;
       kpiTempPill.className = `ml-auto px-2 py-0.5 rounded-full text-xs font-bold ${regime.pillClass}`;
-      document.getElementById('kpi-regime-text').textContent = `${regime.name}（溫度計讀數 ${tempC}°C / 120°C）`;
+      document.getElementById('kpi-regime-text').textContent = regime.desc;
 
-      // KPI 2: Red / Yellow / Green Counts & Objective vs Psychology split
+      // KPI 2: Red / Yellow / Green Counts
       const redCount = scores.filter(s => s >= 1).length;
       const yellowCount = scores.filter(s => s >= 0.5 && s < 1).length;
       const greenCount = scores.filter(s => s === 0).length;
-      const objTotal = scores.slice(0, 4).reduce((a, b) => a + b, 0);
-      const psyTotal = scores.slice(4).reduce((a, b) => a + b, 0);
-
       document.getElementById('kpi-light-counts').innerHTML = `
         <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-sm font-bold bg-rose-100 text-rose-800">${redCount} 紅</span>
         <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-sm font-bold bg-amber-100 text-amber-800">${yellowCount} 黃</span>
         <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-sm font-bold bg-emerald-100 text-emerald-800">${greenCount} 綠</span>
       `;
-      document.getElementById('kpi-split-detail').textContent = `客觀指標 ${objTotal.toFixed(1)} / 4.0 ｜ 心理指標 ${psyTotal.toFixed(1)} / 3.0`;
 
-      // KPI 3: TSMC P/E
-      document.getElementById('kpi-tsmc-pe').textContent = `${pe.toFixed(1)}x`;
-      document.getElementById('kpi-tsmc-detail').textContent = `股價 ${state.tsmcPrice.toLocaleString()} 元 / EPS ${state.tsmcEps} 元（過熱紅線：25–30 倍）`;
-      const tsmcBadge = document.getElementById('kpi-tsmc-badge');
-      if (scores[0] === 1) {
-        tsmcBadge.textContent = '紅燈過熱 (≥25x)';
-        tsmcBadge.className = 'px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 font-semibold';
-      } else if (scores[0] === 0.5) {
-        tsmcBadge.textContent = '黃燈偏溫 (20–24.9x)';
-        tsmcBadge.className = 'px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-semibold';
-      } else {
-        tsmcBadge.textContent = '綠燈安全 (<20x)';
-        tsmcBadge.className = 'px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold';
-      }
+      // KPI 3 & 4: Long-term (Valuation + Macro) vs Short-term (Tech + Chips)
+      document.getElementById('kpi-long-score').textContent = longTotal.toFixed(1);
+      document.getElementById('kpi-long-detail').textContent = `估值 ${valTotal.toFixed(1)} / 2.0 ｜ 總經 ${macroTotal.toFixed(1)} / 2.0`;
+      const longMeta = getSubGroupBadge(longTotal);
+      const longBadgeEl = document.getElementById('kpi-long-badge');
+      longBadgeEl.textContent = longMeta.label;
+      longBadgeEl.className = longMeta.cls;
+
+      document.getElementById('kpi-short-score').textContent = shortTotal.toFixed(1);
+      document.getElementById('kpi-short-detail').textContent = `技術廣度 ${techTotal.toFixed(1)} / 2.0 ｜ 籌碼 ${chipTotal.toFixed(1)} / 2.0`;
+      const shortMeta = getSubGroupBadge(shortTotal);
+      const shortBadgeEl = document.getElementById('kpi-short-badge');
+      shortBadgeEl.textContent = shortMeta.label;
+      shortBadgeEl.className = shortMeta.cls;
 
       document.getElementById('checklist-total-score').textContent = total.toFixed(1);
       const gaugePill = document.getElementById('gauge-zone-pill');
@@ -554,37 +656,28 @@
       gaugePill.className = `px-2.5 py-0.5 rounded-full text-xs font-bold shrink-0 ${regime.pillClass}`;
 
       // Individual Signal Badges
+      const ndcLightName = getNdcLightName(state.ndcScore);
+      const biasSign = bias >= 0 ? '+' : '';
       const sigBadges = [
-        { id: 'sig1-badge', score: scores[0], extra: `(${pe.toFixed(1)}x)` },
-        { id: 'sig2-badge', score: scores[1], extra: '' },
-        { id: 'sig3-badge', score: scores[2], extra: `(${state.marginBal.toLocaleString()}億)` },
-        { id: 'sig4-badge', score: scores[3], extra: `(${state.kingPrice.toLocaleString()}元)` },
-        { id: 'sig5-badge', score: scores[4], extra: '' },
-        { id: 'sig6-badge', score: scores[5], extra: '' },
-        { id: 'sig7-badge', score: scores[6], extra: '' }
+        { id: 'sig1-badge', score: scores[0], extra: `(${state.pe.toFixed(1)}x)` },
+        { id: 'sig2-badge', score: scores[1], extra: `(${state.pb.toFixed(2)}x / ${state.divYield.toFixed(2)}%)` },
+        { id: 'sig3-badge', score: scores[2], extra: `(${state.ndcScore}分・${ndcLightName})` },
+        { id: 'sig4-badge', score: scores[3], extra: `(${Math.round(state.buffett)}%)` },
+        { id: 'sig5-badge', score: scores[4], extra: `(${biasSign}${bias.toFixed(1)}%)` },
+        { id: 'sig6-badge', score: scores[5], extra: `(${state.breadth200.toFixed(1)}%)` },
+        { id: 'sig7-badge', score: scores[6], extra: `(${Math.round(state.marginBal).toLocaleString()}億 / ${state.maintRatio.toFixed(1)}%)` },
+        { id: 'sig8-badge', score: scores[7], extra: `(${state.retailPct.toFixed(1)}% / ${state.daytradePct.toFixed(1)}%)` }
       ];
       sigBadges.forEach(b => {
         const meta = scoreBadgeMeta(b.score);
         const el = document.getElementById(b.id);
-        el.textContent = `${meta.label}${b.extra ? ' ' + b.extra : ''}`;
+        el.textContent = `${meta.label} ${b.extra}`;
         el.className = `px-2.5 py-0.5 rounded-full text-xs font-bold ${meta.cls}`;
       });
 
-      // Sync segmented button visual state for signals 2, 5, 6, 7
-      const segValMap = { '2': state.sig2Score, '5': state.sig5Score, '6': state.sig6Score, '7': state.sig7Score };
-      document.querySelectorAll('.sig-seg-btn').forEach(btn => {
-        const sKey = btn.dataset.sig;
-        const val = Number(btn.dataset.score);
-        const active = Number(segValMap[sKey]) === val;
-        if (active) {
-          const activeColor = val === 1
-            ? 'bg-rose-600 text-white border-rose-600'
-            : (val === 0.5 ? 'bg-amber-500 text-white border-amber-500' : 'bg-emerald-600 text-white border-emerald-600');
-          btn.className = `sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition ${activeColor}`;
-        } else {
-          btn.className = 'sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition bg-white text-slate-600 border-slate-300 hover:bg-slate-100';
-        }
-      });
+      // Maintenance Ratio low-level warning note
+      const maintNote = document.getElementById('sig7-maint-note');
+      maintNote.classList.toggle('hidden', state.maintRatio >= 145);
 
       // Update Gauge Chart
       const gaugeCtx = document.getElementById('thermometerGaugeChart').getContext('2d');
@@ -595,7 +688,7 @@
         gaugeChart = new Chart(gaugeCtx, {
           type: 'doughnut',
           data: {
-            labels: ['理性冷靜 (0–30°C)', '溫熱穩健 (31–60°C)', '過熱警戒 (61–90°C)', '極度過熱 (91–120°C)'],
+            labels: ['理性冷靜 (0–30°C)', '溫熱分化 (31–60°C)', '過熱警戒 (61–90°C)', '極度過熱 (91–120°C)'],
             datasets: [{
               data: [30, 30, 30, 30],
               backgroundColor: ['#10b981', '#f59e0b', '#f97316', '#e11d48'],
@@ -620,7 +713,7 @@
         gaugeChart.update();
       }
 
-      // Update 7 Signals Bar Chart
+      // Update 8 Signals Bar Chart
       const barColors = scores.map(s => scoreBadgeMeta(s).color);
       const sigCtx = document.getElementById('signalsBarChart').getContext('2d');
       if (signalsChart) {
@@ -632,16 +725,17 @@
           type: 'bar',
           data: {
             labels: [
-              '① 台積電 P/E 25–30x',
-              '② 主動式 ETF 狂熱',
-              '③ 四貸同堂 / 融資',
-              '④ 萬元股王 / 高價股',
-              '⑤ 貪婪求連續漲停',
-              '⑥ 盲目樂觀排斥風險',
-              '⑦ 績效競賽焦慮'
+              '① 大盤本益比 (P/E)',
+              '② P/B ＆ 現金殖利率',
+              '③ 國發會景氣燈號',
+              '④ 台股巴菲特指標',
+              '⑤ 年線乖離率 (240MA)',
+              '⑥ 成分股 > 200日線',
+              '⑦ 融資餘額 ＆ 維持率',
+              '⑧ 自然人 ＆ 當沖占比'
             ],
             datasets: [{
-              label: '警訊燈號強度',
+              label: '過熱燈號強度',
               data: scores,
               backgroundColor: barColors,
               borderRadius: 6
@@ -661,19 +755,23 @@
     }
 
     function syncDomFromState() {
-      document.getElementById('in-tsmc-price').value = state.tsmcPrice;
-      document.getElementById('in-tsmc-eps').value = state.tsmcEps;
+      document.getElementById('in-pe').value = state.pe;
+      document.getElementById('in-pb').value = state.pb;
+      document.getElementById('in-yield').value = state.divYield;
+      document.getElementById('in-ndc-score').value = state.ndcScore;
+      document.getElementById('in-buffett').value = state.buffett;
+      document.getElementById('in-taiex').value = state.taiex;
+      document.getElementById('in-ma240').value = state.ma240;
+      document.getElementById('in-breadth200').value = state.breadth200;
       document.getElementById('in-margin-bal').value = state.marginBal;
-      document.getElementById('in-four-loans').value = state.fourLoans;
-      document.getElementById('in-king-price').value = state.kingPrice;
-      document.getElementById('in-1k-count').value = state.count1k;
+      document.getElementById('in-maint-ratio').value = state.maintRatio;
+      document.getElementById('in-retail-pct').value = state.retailPct;
+      document.getElementById('in-daytrade-pct').value = state.daytradePct;
 
       document.querySelectorAll('.sig-check').forEach(cb => {
         cb.checked = !!state.sigChecks[cb.dataset.sig];
       });
-
-      const checkedSigCount = document.querySelectorAll('.sig-check:checked').length;
-      document.getElementById('checklist-progress-badge').textContent = `已人工覆核 ${checkedSigCount} / 7 項`;
+      updateCheckedCountDisplays();
     }
 
     function downloadAsIndexHtml() {
@@ -696,27 +794,27 @@
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showToast('已匯出 index.html，可依指南上傳至 GitHub Pages 並嵌入 Notion！');
+      showToast('已匯出 index.html，可上傳至 GitHub Pages 並嵌入 Notion！');
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       loadState();
       syncDomFromState();
 
-      document.getElementById('btn-preset-730').addEventListener('click', () => {
-        Object.assign(state, PRESET_730_PEAK);
+      document.getElementById('btn-preset-peak').addEventListener('click', () => {
+        Object.assign(state, PRESET_PEAK_202610);
         saveState();
         syncDomFromState();
         renderThermometerViews();
-        showToast('已載入 7/30 公開課過熱峰值 (7/7 燈 · 110°C)');
+        showToast('已載入 2026/10 近 5 萬點歷史高點過熱峰值 (8.0/8 燈 · 120°C)');
       });
 
       document.getElementById('btn-reset-live').addEventListener('click', () => {
-        Object.assign(state, PRESET_LIVE_1119);
+        Object.assign(state, PRESET_LIVE_202611);
         saveState();
         syncDomFromState();
         renderThermometerViews();
-        showToast('已重置為 2026-11-19 台股去槓桿後實況');
+        showToast('已重置為 2026-11-19 台股最新實況 (4.0/8 燈 · 60°C)');
       });
 
       document.getElementById('btn-download-index').addEventListener('click', downloadAsIndexHtml);
@@ -731,34 +829,24 @@
           }
         });
       };
-      bindNum('in-tsmc-price', 'tsmcPrice');
-      bindNum('in-tsmc-eps', 'tsmcEps');
+      bindNum('in-pe', 'pe');
+      bindNum('in-pb', 'pb');
+      bindNum('in-yield', 'divYield');
+      bindNum('in-ndc-score', 'ndcScore');
+      bindNum('in-buffett', 'buffett');
+      bindNum('in-taiex', 'taiex');
+      bindNum('in-ma240', 'ma240');
+      bindNum('in-breadth200', 'breadth200');
       bindNum('in-margin-bal', 'marginBal');
-      bindNum('in-king-price', 'kingPrice');
-      bindNum('in-1k-count', 'count1k');
-
-      document.getElementById('in-four-loans').addEventListener('change', e => {
-        state.fourLoans = e.target.value;
-        saveState();
-        renderThermometerViews();
-      });
-
-      document.querySelectorAll('.sig-seg-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const sig = btn.dataset.sig;
-          const score = Number(btn.dataset.score);
-          state[`sig${sig}Score`] = score;
-          saveState();
-          renderThermometerViews();
-        });
-      });
+      bindNum('in-maint-ratio', 'maintRatio');
+      bindNum('in-retail-pct', 'retailPct');
+      bindNum('in-daytrade-pct', 'daytradePct');
 
       document.querySelectorAll('.sig-check').forEach(cb => {
         cb.addEventListener('change', () => {
           state.sigChecks[cb.dataset.sig] = cb.checked;
           saveState();
-          const checkedSigCount = document.querySelectorAll('.sig-check:checked').length;
-          document.getElementById('checklist-progress-badge').textContent = `已人工覆核 ${checkedSigCount} / 7 項`;
+          updateCheckedCountDisplays();
         });
       });
 
