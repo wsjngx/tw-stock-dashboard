@@ -1,0 +1,2200 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>台股市場溫度計：七大過熱警訊檢核 × 雷浩斯價值投資決策儀表板</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', 'Noto Sans TC', sans-serif; }
+    .tab-btn.active { background-color: #0f172a; color: #ffffff; }
+    .card-shadow { box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04); }
+    input[type="range"] { accent-color: #4f46e5; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen antialiased">
+  <!-- Sticky Header -->
+  <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-400/40 flex items-center justify-center text-rose-300 font-bold text-xl shrink-0">
+          🌡️
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold tracking-tight">台股市場溫度計：七大過熱警訊檢核 × 雷浩斯價值投資決策儀表板</h1>
+          <p class="text-xs text-slate-400">源自《7/30 雷浩斯 2026 下半年投資布局公開課》63 頁完整框架 · 含市場溫度計 (0–120°C)、現金蓄水池壓力測試、三層選股過濾器與安全邊際本益比尺</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <span id="header-temp-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-200 border border-amber-400/30">
+          2.0 / 7 燈 · 31°C · 溫熱穩健區
+        </span>
+        <button id="btn-preset-730" type="button" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-rose-900/70 hover:bg-rose-800 text-rose-100 border border-rose-700/80 transition">
+          載入 7/30 公開課過熱峰值 (7/7 燈 · 110°C)
+        </button>
+        <button id="btn-reset-live" type="button" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+          重置為 2026-11-19 台股去槓桿後實況
+        </button>
+        <button id="btn-download-index" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white border border-indigo-500 transition">
+          ⬇ 下載 index.html
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white text-slate-700 border-b border-slate-200 overflow-x-auto">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center gap-1.5 py-2 whitespace-nowrap">
+        <button type="button" data-tab="thermometer" class="tab-btn active px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition">1. 市場溫度計與七大過熱檢核</button>
+        <button type="button" data-tab="reservoir" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium hover:bg-slate-100 transition">2. 現金蓄水池 × 去槓桿瀑布壓測</button>
+        <button type="button" data-tab="filter" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium hover:bg-slate-100 transition">3. 三層選股過濾器 &amp; 實戰 5 步驟</button>
+        <button type="button" data-tab="valuation" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium hover:bg-slate-100 transition">4. 安全邊際本益比尺 &amp; 退場計算機</button>
+        <button type="button" data-tab="case" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium hover:bg-slate-100 transition">5. 雷浩斯決策矩陣 × 緯穎實戰拆解</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+    <div id="toast" class="hidden fixed bottom-5 right-5 z-50 bg-slate-900 text-white text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-lg border border-slate-700"></div>
+
+    <!-- ================================================================ -->
+    <!-- TAB 1: MARKET THERMOMETER & 7 OVERHEAT SIGNALS                   -->
+    <!-- ================================================================ -->
+    <section id="tab-thermometer" class="tab-panel space-y-6">
+      <!-- 4 Top KPI Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-2xl p-4 border border-slate-200 card-shadow">
+          <div class="flex items-center justify-between text-xs text-slate-500 mb-1">
+            <span>市場過熱警訊得分 (0–7 燈)</span>
+            <span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-medium">自動判分</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="kpi-score" class="text-3xl font-extrabold text-amber-600">2.0</span>
+            <span class="text-sm text-slate-500">/ 7.0 燈</span>
+            <span id="kpi-temp-pill" class="ml-auto px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">31°C</span>
+          </div>
+          <p id="kpi-regime-text" class="text-xs font-semibold text-amber-700 mt-1">溫熱穩健區（去槓桿降溫整理中）</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-4 border border-slate-200 card-shadow">
+          <div class="flex items-center justify-between text-xs text-slate-500 mb-1">
+            <span>建議股票部位 vs. 現金蓄水池</span>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-medium">動態水位</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="kpi-equity-range" class="text-2xl sm:text-3xl font-extrabold text-slate-900">60%–75%</span>
+          </div>
+          <p id="kpi-cash-range" class="text-xs text-slate-600 mt-1">建議保留 25%–40% 現金蓄水池以待低價優質資產</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-4 border border-slate-200 card-shadow">
+          <div class="flex items-center justify-between text-xs text-slate-500 mb-1">
+            <span>台積電 (2330) 估值溫度</span>
+            <span id="kpi-tsmc-badge" class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-semibold">黃燈偏溫</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="kpi-tsmc-pe" class="text-3xl font-extrabold text-slate-900">22.3x</span>
+            <span class="text-xs text-slate-500">本益比</span>
+          </div>
+          <p id="kpi-tsmc-detail" class="text-xs text-slate-600 mt-1">股價 2,140 元 / EPS 96 元（過熱紅線：25–30 倍）</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-4 border border-slate-200 card-shadow">
+          <div class="flex items-center justify-between text-xs text-slate-500 mb-1">
+            <span>風險 / 機會方程式定位 (P.13)</span>
+            <span class="px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-medium">相對論</span>
+          </div>
+          <div id="kpi-equation-title" class="text-base font-extrabold text-indigo-700 mt-0.5">轉向機會方程式前緣</div>
+          <p id="kpi-equation-desc" class="text-xs text-slate-600 mt-1">[市場回檔] + [充足現金] ＝ 靜待融資徹底清洗後的絕佳進場點</p>
+        </div>
+      </div>
+
+      <!-- Executive Strategy Banner -->
+      <div class="bg-slate-900 text-white rounded-2xl p-5 border border-slate-800 card-shadow space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span id="exec-scenario-tag" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30">2026-11-19 台股實況判讀</span>
+              <h2 class="text-base font-bold">台股雙引擎基本面 × 市場溫度計整合指令</h2>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">簡報 P.04–P.14 核心法則：台積電與 AI 算力支撐長期基本面（2026 台灣 GDP 挑戰 10%），但「股價上漲過高過熱，就是最大的風險」</p>
+          </div>
+          <span id="exec-action-pill" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-200 border border-amber-400/40 shrink-0">
+            行動指令：守住現金蓄水池・不盲目接刀・篩選安全邊際
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+          <div class="p-3.5 rounded-xl bg-slate-800/70 border border-slate-700 space-y-1.5">
+            <div class="font-bold text-cyan-300">1. 基本面雙引擎（P.04–P.06）</div>
+            <p class="text-slate-300 leading-relaxed">台積電（不可替代絕對護城河）＋ AI 產業（從訓練成本轉向應用 ROI 變現）驅動 2023–2026 長期動能；但股價短期若過度偏離基本面，潛在報酬率將嚴重不足（P.07）。</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-800/70 border border-slate-700 space-y-1.5">
+            <div class="font-bold text-rose-300">2. 當下溫度計診斷（P.08–P.09）</div>
+            <p id="exec-diag-text" class="text-slate-300 leading-relaxed"></p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-800/70 border border-slate-700 space-y-1.5">
+            <div class="font-bold text-emerald-300">3. 巴菲特鐵則與下一步（P.10–P.14）</div>
+            <p id="exec-next-text" class="text-slate-300 leading-relaxed"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row: Gauge + 7 Signals Bar -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-5 bg-white rounded-2xl p-5 border border-slate-200 card-shadow flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <div>
+                <h2 class="text-sm font-bold text-slate-900">市場溫度計儀表 (0°C 理性 → 120°C 極度過熱)</h2>
+                <p class="text-xs text-slate-500">對應簡報 P.08 市場溫度計（7/30 直播峰值達 ~110°C 警戒紅區）</p>
+              </div>
+              <span id="gauge-zone-pill" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">31°C</span>
+            </div>
+            <div class="relative h-56 w-full flex items-center justify-center">
+              <canvas id="thermometerGaugeChart"></canvas>
+            </div>
+          </div>
+          <div class="grid grid-cols-4 gap-1.5 text-center text-[11px] pt-2 border-t border-slate-100">
+            <div class="p-1.5 rounded-lg bg-emerald-50 text-emerald-800 font-semibold">0–30°C<br/>理性冷靜</div>
+            <div class="p-1.5 rounded-lg bg-amber-50 text-amber-800 font-semibold">31–60°C<br/>溫熱穩健</div>
+            <div class="p-1.5 rounded-lg bg-orange-50 text-orange-800 font-semibold">61–90°C<br/>過熱警戒</div>
+            <div class="p-1.5 rounded-lg bg-rose-50 text-rose-800 font-semibold">91–120°C<br/>極度過熱</div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 bg-white rounded-2xl p-5 border border-slate-200 card-shadow flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <h2 class="text-sm font-bold text-slate-900">七大過熱警訊分布圖（4 項客觀市場指標 ＋ 3 項群眾心理指標）</h2>
+              <p class="text-xs text-slate-500">0 分＝理性綠燈 ｜ 0.5 分＝升溫／清洗黃燈 ｜ 1.0 分＝過熱紅燈</p>
+            </div>
+            <span id="checklist-progress-badge" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-semibold">已人工覆核 0 / 7 項</span>
+          </div>
+          <div class="relative h-64 w-full">
+            <canvas id="signalsBarChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive 7 Signals Checklist -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
+          <div>
+            <h2 class="text-base font-bold text-slate-900">市場溫度計：七大過熱警訊逐項檢核表（即時輸入自動判燈）</h2>
+            <p class="text-xs text-slate-500">數值型指標（① 台積電 P/E、③ 上市融資餘額、④ 股王股價/千金股數）修改後自動判燈；心理與募資指標可三段切換並勾選人工覆核（自動保存於本機）</p>
+          </div>
+          <div class="text-xs text-slate-600 shrink-0">
+            加權總分：<strong id="checklist-total-score" class="text-base text-slate-900">2.0</strong> / 7.0 燈
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="seven-signals-grid">
+          <!-- Signal 1: TSMC PE -->
+          <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-1">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-bold text-indigo-700 uppercase">警訊 ① · 權值核心估值</span>
+              <span id="sig1-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">0.5 分 · 黃燈 (22.3x)</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900">台積電 (2330) 本益比飆升至 25–30 倍</h3>
+            <p class="text-xs text-slate-600">台積電為台股最大權值股與雙引擎底座；若本益比飆升至 25–30 倍，代表連權值龍頭都嚴重透支未來成長。</p>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <label class="block">
+                <span class="text-slate-600 font-medium">台積電股價 (元)</span>
+                <input id="in-tsmc-price" type="number" step="10" value="2140" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+              </label>
+              <label class="block">
+                <span class="text-slate-600 font-medium">預估 / TTM EPS (元)</span>
+                <input id="in-tsmc-eps" type="number" step="1" value="96" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+              </label>
+            </div>
+            <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/80">
+              <span class="text-slate-500">門檻：&lt;20x 綠燈 ｜ 20–24.9x 黃燈 ｜ ≥25x 紅燈</span>
+              <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer">
+                <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="1" />
+                <span>已檢視</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Signal 2: Active ETF -->
+          <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-2">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-bold text-indigo-700 uppercase">警訊 ② · 資金募集熱度</span>
+              <span id="sig2-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">0 分 · 綠燈 (理性常態)</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900">主動式 ETF 募資狂熱</h3>
+            <p class="text-xs text-slate-600">投信密集推出主動式／高股息新 ETF、申購金額動輒創紀錄，且散戶出現解定存、借貸排隊搶募現象。</p>
+            <div class="grid grid-cols-3 gap-1.5 text-xs" id="sig2-btns">
+              <button type="button" data-sig="2" data-score="0" class="sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition">0 分<br/><span class="text-[10px] font-normal">理性常態</span></button>
+              <button type="button" data-sig="2" data-score="0.5" class="sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition">0.5 分<br/><span class="text-[10px] font-normal">局部話題</span></button>
+              <button type="button" data-sig="2" data-score="1" class="sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition">1.0 分<br/><span class="text-[10px] font-normal">募資狂熱</span></button>
+            </div>
+            <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/80">
+              <span class="text-slate-500">觀察指標：新募集規模、折溢價與媒體洗版度</span>
+              <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer">
+                <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="2" />
+                <span>已檢視</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Signal 3: 4 Loans & Margin -->
+          <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-3">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-bold text-indigo-700 uppercase">警訊 ③ · 籌碼槓桿風險</span>
+              <span id="sig3-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">0.5 分 · 黃燈 (清洗中)</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900">槓桿過度：「四貸同堂」（不限用途資金借貸）</h3>
+            <p class="text-xs text-slate-600">「房貸增貸＋信貸＋股票質押（不限用途借貸）＋融資」高相關性疊加。10 月底跨機構聯徵新制上線後，11 月中旬已見明顯去槓桿清洗。</p>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <label class="block">
+                <span class="text-slate-600 font-medium">上市融資餘額 (億元)</span>
+                <input id="in-margin-bal" type="number" step="100" value="5080" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+              </label>
+              <label class="block">
+                <span class="text-slate-600 font-medium">市場四貸借貸熱度</span>
+                <select id="in-four-loans" class="mt-1 w-full px-2 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold">
+                  <option value="cool">冷卻收緊（聯徵穿透＋去槓桿中）</option>
+                  <option value="warm">局部活躍（質押/信貸併用）</option>
+                  <option value="hot">極度狂熱（四貸同堂全開）</option>
+                </select>
+              </label>
+            </div>
+            <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/80">
+              <span class="text-slate-500">門檻：&lt;5,000 億綠 ｜ 5,000–5,799 億黃 ｜ ≥5,800 億或狂熱紅</span>
+              <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer">
+                <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="3" />
+                <span>已檢視</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Signal 4: 10k Stock King -->
+          <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-4">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-bold text-indigo-700 uppercase">警訊 ④ · 高價股風險偏好</span>
+              <span id="sig4-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">0.5 分 · 黃燈 (震盪洗牌)</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900">萬元股王現身，高價股暴增</h3>
+            <p class="text-xs text-slate-600">股王逼近或突破萬元且千金股遍地開花，代表資金風險偏好極端化。11/19 信驊跌停至 8,730 元、單日 20 檔千金股跌停洗牌。</p>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <label class="block">
+                <span class="text-slate-600 font-medium">目前股王股價 (元)</span>
+                <input id="in-king-price" type="number" step="100" value="8730" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+              </label>
+              <label class="block">
+                <span class="text-slate-600 font-medium">台股千金股家數 (檔)</span>
+                <input id="in-1k-count" type="number" step="1" value="18" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+              </label>
+            </div>
+            <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/80">
+              <span class="text-slate-500">門檻：股王 ≥10,000 元或千金 ≥25 檔亮紅燈</span>
+              <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer">
+                <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="4" />
+                <span>已檢視</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Signal 5: Extreme Greed -->
+          <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-bold text-rose-700 uppercase">警訊 ⑤ · 群眾心理 A</span>
+              <span id="sig5-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">0 分 · 綠燈</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900">貪婪極端化：不滿足於上漲，渴求連續漲停</h3>
+            <p class="text-xs text-slate-600">投資人嫌棄穩健成長或緩漲行情，認為沒有連續漲停板就是浪費時間，追逐無基本面支撐的飆股。</p>
+            <div class="grid grid-cols-3 gap-1.5 text-xs" id="sig5-btns">
+              <button type="button" data-sig="5" data-score="0" class="sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition">0 分<br/><span class="text-[10px] font-normal">重視基本面</span></button>
+              <button type="button" data-sig="5" data-score="0.5" class="sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition">0.5 分<br/><span class="text-[10px] font-normal">羨慕短線飆股</span></button>
+              <button type="button" data-sig="5" data-score="1" class="sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition">1.0 分<br/><span class="text-[10px] font-normal">渴求連拉漲停</span></button>
+            </div>
+            <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/80">
+              <span class="text-slate-500">自我檢視：是否嫌棄年化 15%–20% 複利太慢？</span>
+              <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer">
+                <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="5" />
+                <span>已檢視</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Signal 6: Blind Optimism -->
+          <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-6">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-bold text-rose-700 uppercase">警訊 ⑥ · 群眾心理 B</span>
+              <span id="sig6-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">0 分 · 綠燈</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900">盲目樂觀：無法忍受任何悲觀與風險言論</h3>
+            <p class="text-xs text-slate-600">社群與媒體呈一言堂，「這次不一樣」當道，任何提醒估值過高或建議保留現金者皆遭嘲諷攻擊。</p>
+            <div class="grid grid-cols-3 gap-1.5 text-xs" id="sig6-btns">
+              <button type="button" data-sig="6" data-score="0" class="sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition">0 分<br/><span class="text-[10px] font-normal">正視風險言論</span></button>
+              <button type="button" data-sig="6" data-score="0.5" class="sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition">0.5 分<br/><span class="text-[10px] font-normal">偏多不願減碼</span></button>
+              <button type="button" data-sig="6" data-score="1" class="sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition">1.0 分<br/><span class="text-[10px] font-normal">排斥一切風險</span></button>
+            </div>
+            <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/80">
+              <span class="text-slate-500">當市場聽不進任何保守聲音時，往往接近反轉</span>
+              <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer">
+                <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="6" />
+                <span>已檢視</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Signal 7: Performance Race -->
+          <div class="md:col-span-2 rounded-2xl border border-slate-200 p-4 bg-slate-50/70 space-y-3" id="card-sig-7">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <span class="text-xs font-bold text-rose-700 uppercase">警訊 ⑦ · 群眾心理 C</span>
+                <h3 class="text-sm font-bold text-slate-900 mt-0.5">績效競賽：投資淪為比較，無法忍受賺得比別人少</h3>
+              </div>
+              <span id="sig7-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 self-start sm:self-center">0 分 · 綠燈</span>
+            </div>
+            <p class="text-xs text-slate-600">因 FOMO 焦慮與他人對帳單刺激，被迫在高檔放棄安全邊際與現金水位，只為了追平短期報酬率。</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs" id="sig7-btns">
+              <button type="button" data-sig="7" data-score="0" class="sig-seg-btn px-3 py-2 rounded-lg font-semibold border transition">0 分 · 專注自身財務目標與複利紀律</button>
+              <button type="button" data-sig="7" data-score="0.5" class="sig-seg-btn px-3 py-2 rounded-lg font-semibold border transition">0.5 分 · 偶受社群對帳單干擾</button>
+              <button type="button" data-sig="7" data-score="1" class="sig-seg-btn px-3 py-2 rounded-lg font-semibold border transition">1.0 分 · 陷入績效比較焦慮、在高點加碼追價</button>
+            </div>
+            <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/80">
+              <span class="text-slate-500">簡報 P.14 提醒：「你無法控制股市漲跌，但你可以控制部位大小與現金水位」</span>
+              <label class="flex items-center gap-1.5 font-medium text-slate-800 cursor-pointer">
+                <input type="checkbox" class="sig-check w-4 h-4 rounded text-indigo-600" data-sig="7" />
+                <span>已檢視</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Market Mechanism Double-Edged Sword (P.11) -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow overflow-x-auto space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h2 class="text-sm font-bold text-slate-900">市場機制的雙面刃（簡報 P.11 行動對照矩陣）</h2>
+            <p class="text-xs text-slate-500">依據目前市場溫度自動標示當下應該採取的「做好準備者」策略</p>
+          </div>
+          <button type="button" data-jump="reservoir" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 text-left">前往現金蓄水池壓力測試 →</button>
+        </div>
+        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+          <thead>
+            <tr class="border-b border-slate-200 text-slate-500">
+              <th class="py-2.5 pr-4 font-semibold">市場循環階段</th>
+              <th class="py-2.5 pr-4 font-semibold">絕對優勢方</th>
+              <th class="py-2.5 pr-4 font-semibold">毫無準備者（結局）</th>
+              <th class="py-2.5 font-semibold text-emerald-700">做好準備者（我們的定位）</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr id="row-mech-bull">
+              <td class="py-3 pr-4 font-bold text-slate-900 whitespace-nowrap">上漲的多頭</td>
+              <td class="py-3 pr-4 font-semibold text-slate-800">賣股票的人</td>
+              <td class="py-3 pr-4 text-rose-700">盲目追高與放大槓桿（耗盡現金）</td>
+              <td class="py-3 px-3 rounded-lg bg-emerald-50/70 font-semibold text-emerald-900">獲利了結，增加投資組合現金蓄水池</td>
+            </tr>
+            <tr id="row-mech-bear">
+              <td class="py-3 pr-4 font-bold text-rose-700 whitespace-nowrap">回檔的去槓桿</td>
+              <td class="py-3 pr-4 font-semibold text-slate-800">準備買進的人</td>
+              <td class="py-3 pr-4 text-rose-700">被迫斷頭，承受恐慌與痛苦</td>
+              <td class="py-3 px-3 rounded-lg bg-emerald-50/70 font-semibold text-emerald-900">擁有現金，從容佈局低價優質資產</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- TAB 2: CASH RESERVOIR & DELEVERAGING WATERFALL STRESS TEST       -->
+    <!-- ================================================================ -->
+    <section id="tab-reservoir" class="tab-panel hidden space-y-6">
+      <!-- Deleveraging Waterfall (P.09) -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h2 class="text-base font-bold text-slate-900">去槓桿瀑布效應（簡報 P.09）× 現金蓄水池理論（P.12）</h2>
+            <p class="text-xs text-slate-500">「過熱必然伴隨回檔；當市場開始去除槓桿，這將是一個極度痛苦的物理性強迫過程。」</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 shrink-0">巴菲特鐵則：不要賠錢</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+          <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 space-y-1">
+            <div class="font-bold text-amber-800">Stage 1 · 風險累積</div>
+            <div class="text-sm font-bold text-slate-900">高成本建倉 ＋ 市場過熱</div>
+            <p class="text-slate-600">在 25–30 倍 PE 追高，並疊加「四貸同堂」擴大曝險，安全邊際歸零。</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-orange-50 border border-orange-200 space-y-1">
+            <div class="font-bold text-orange-800">Stage 2 · 估值修正</div>
+            <div class="text-sm font-bold text-slate-900">必然的回檔</div>
+            <p class="text-slate-600">利率、關稅或財報預期落差觸發修正（如 2026/11/16 台股重挫 2,635 點）。</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-rose-50 border border-rose-200 space-y-1">
+            <div class="font-bold text-rose-800">Stage 3 · 物理強迫</div>
+            <div class="text-sm font-bold text-slate-900">觸發斷頭與去槓桿</div>
+            <p class="text-slate-600">融資與質押維持率跌破 130%，不分好壞股強制平倉（單日融資減逾 423 億、20 檔千金股跌停）。</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 space-y-1">
+            <div class="font-bold text-emerald-800">Stage 4 · 蓄水池開閘</div>
+            <div class="text-sm font-bold text-slate-900">危機入市吸收優質資產</div>
+            <p class="text-slate-600">毫無準備者恐慌拋售；手握高點獲利保留的「現金蓄水池」者，低檔分批接手。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Reservoir & 4-Loans Stress Tester -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-6 bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h2 class="text-base font-bold text-slate-900">個人現金蓄水池 &amp;「四貸同堂」壓力測試器</h2>
+              <p class="text-xs text-slate-500">輸入實際部位與槓桿，檢驗回檔 -15% / -25% / -35% 時是否觸發斷頭</p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-2">
+            <button id="btn-res-safe" type="button" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition">
+              載入無槓桿穩健範例 (650萬股/350萬現金)
+            </button>
+            <button id="btn-res-fourloans" type="button" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 transition">
+              🧪 模擬「四貸同堂」高風險範例
+            </button>
+            <button id="btn-res-match-temp" type="button" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 transition">
+              依溫度計自動切分淨本金
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+            <label class="block">
+              <span class="font-semibold text-slate-700">自有淨本金參考 (萬元)</span>
+              <input id="res-capital" type="number" min="0" step="50" value="1000" class="mt-1 w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-bold" />
+            </label>
+            <label class="block">
+              <span class="font-semibold text-slate-700">目前股票總市值 (萬元)</span>
+              <input id="res-stock" type="number" min="0" step="50" value="650" class="mt-1 w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-bold" />
+            </label>
+            <label class="block">
+              <span class="font-semibold text-amber-800">現金蓄水池餘額 (萬元)</span>
+              <input id="res-cash" type="number" min="0" step="50" value="350" class="mt-1 w-full px-3 py-2 rounded-xl border border-amber-300 bg-amber-50/40 font-bold" />
+            </label>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-slate-800">「四貸同堂」槓桿負債檢核（萬元，若無請維持 0）</span>
+              <span class="text-slate-500">高相關性負債遇崩盤將產生骨牌效應</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2.5 text-xs">
+              <label class="block">
+                <span class="text-slate-600">1. 證券融資金額 (計入維持率)</span>
+                <input id="res-debt-margin" type="number" min="0" step="50" value="0" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+              </label>
+              <label class="block">
+                <span class="text-slate-600">2. 股票質押 / 不限用途借貸</span>
+                <input id="res-debt-pledge" type="number" min="0" step="50" value="0" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+              </label>
+              <label class="block">
+                <span class="text-slate-600">3. 個人信貸投入股市</span>
+                <input id="res-debt-credit" type="number" min="0" step="50" value="0" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+              </label>
+              <label class="block">
+                <span class="text-slate-600">4. 房貸增貸 / 理財型房貸</span>
+                <input id="res-debt-mortgage" type="number" min="0" step="50" value="0" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-semibold" />
+              </label>
+            </div>
+          </div>
+
+          <!-- Diagnostics Output -->
+          <div id="res-diag-box" class="p-4 rounded-xl border bg-emerald-50 border-emerald-200 text-xs space-y-1.5"></div>
+        </div>
+
+        <div class="lg:col-span-6 bg-white rounded-2xl p-5 border border-slate-200 card-shadow flex flex-col justify-between space-y-4">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">實際部位 vs. 市場溫度計建議蓄水池對比</h3>
+            <p class="text-xs text-slate-500">連動 Tab 1 市場溫度，一眼看出是否現金不足或過度槓桿</p>
+            <div class="relative h-60 w-full mt-3">
+              <canvas id="reservoirChart"></canvas>
+            </div>
+          </div>
+
+          <div class="border-t border-slate-200 pt-3 space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-slate-800">現金蓄水池「分批危機入市」子彈分配（簡報 P.27）</span>
+              <span id="res-deployable-badge" class="font-semibold text-indigo-700">可用子彈：350 萬</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2 text-center text-xs">
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                <div class="text-slate-500">第 1 批試單 (30%)</div>
+                <div id="res-bullet-1" class="font-bold text-slate-900 text-sm mt-0.5">105 萬</div>
+                <div class="text-[10px] text-slate-500">回檔 -15% / 達 20x PE</div>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                <div class="text-slate-500">第 2 批加碼 (40%)</div>
+                <div id="res-bullet-2" class="font-bold text-slate-900 text-sm mt-0.5">140 萬</div>
+                <div class="text-[10px] text-slate-500">回檔 -25% / 達 15x PE</div>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                <div class="text-slate-500">第 3 批重倉 (30%)</div>
+                <div id="res-bullet-3" class="font-bold text-slate-900 text-sm mt-0.5">105 萬</div>
+                <div class="text-[10px] text-slate-500">回檔 -35% / 達 12x PE</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stress Test Table -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow overflow-x-auto space-y-3">
+        <div>
+          <h3 class="text-sm font-bold text-slate-900">三段大盤回檔壓力測試表（-15% / -25% / -35%）</h3>
+          <p class="text-xs text-slate-500">計算式：預估證券端擔保維持率 ＝ 回檔後股票市值 ÷ (融資金額 ＋ 股票質押金額) × 100%（台股追繳紅線為 130%）</p>
+        </div>
+        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+          <thead>
+            <tr class="border-b border-slate-200 text-slate-500">
+              <th class="py-2 pr-4 font-semibold">壓力情境</th>
+              <th class="py-2 pr-4 font-semibold">股票市值</th>
+              <th class="py-2 pr-4 font-semibold">實質自有淨值</th>
+              <th class="py-2 pr-4 font-semibold">淨值縮水幅</th>
+              <th class="py-2 pr-4 font-semibold">證券端擔保維持率</th>
+              <th class="py-2 font-semibold">去槓桿與操作判定</th>
+            </tr>
+          </thead>
+          <tbody id="stress-tbody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- TAB 3: 3-LAYER STOCK FILTER & 5 PRACTICAL STEPS                  -->
+    <!-- ================================================================ -->
+    <section id="tab-filter" class="tab-panel hidden space-y-6">
+      <!-- Top Control & Verdict Banner -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-base font-bold text-slate-900">價值投資極簡藍圖：三大核心支柱 × 三層選股過濾器 × 實戰 5 步驟</h2>
+            <p class="text-xs text-slate-500">整合簡報 P.17–P.24（心法／矩陣量化／六大護城河／經營者）與 P.48–P.62（Smart 自學網實戰 5 步驟）</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" data-filter-preset="wiwynn" class="filter-preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-500 transition">
+              載入 緯穎 (6669) 案例
+            </button>
+            <button type="button" data-filter-preset="tsmc" class="filter-preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-white hover:bg-slate-700 transition">
+              載入 台積電 (2330) 案例
+            </button>
+            <button type="button" data-filter-preset="clear" class="filter-preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300 transition">
+              清空重填 (自訂標的)
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 items-center p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+          <label class="block">
+            <span class="font-semibold text-slate-700">目前評估標的名稱 / 代號</span>
+            <input id="flt-target-name" type="text" value="緯穎 (6669)" class="mt-1 w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-white font-bold" />
+          </label>
+          <div class="p-2.5 rounded-lg bg-white border border-slate-200">
+            <div class="text-slate-500">四大心法 &amp; 產業檢核</div>
+            <div id="flt-score-mind" class="text-base font-extrabold text-slate-900 mt-0.5">7 / 7</div>
+          </div>
+          <div class="p-2.5 rounded-lg bg-white border border-slate-200">
+            <div class="text-slate-500">量化財報 &amp; 經營者檢核</div>
+            <div id="flt-score-quant" class="text-base font-extrabold text-slate-900 mt-0.5">15 / 16</div>
+          </div>
+          <div id="flt-verdict-box" class="p-2.5 rounded-lg border bg-emerald-50 border-emerald-200">
+            <div class="text-emerald-800 font-bold">綜合判定：高勝率好公司</div>
+            <div id="flt-verdict-sub" class="text-[11px] text-emerald-700 mt-0.5">護城河均分 4.5 / 5.0 · 可進安全邊際估值</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pillar 1 + Step 1&2 -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-6 bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-3">
+          <h3 class="text-sm font-bold text-slate-900">第一支柱：價值投資四大心法（簡報 P.20）</h3>
+          <p class="text-xs text-slate-500">「拼湊的策略無法成就長期獲利；心法決定什麼該做、什麼不該做。」</p>
+          <div class="space-y-2 text-xs">
+            <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" class="flt-check mt-0.5 w-4 h-4 rounded text-indigo-600" data-grp="mind" data-id="m1" checked />
+              <div><strong>買股票 ＝ 買公司：</strong>視自己為企業長期擁有者，而非短期博弈籌碼。</div>
+            </label>
+            <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" class="flt-check mt-0.5 w-4 h-4 rounded text-indigo-600" data-grp="mind" data-id="m2" checked />
+              <div><strong>安全邊際：</strong>價格預留犯錯空間，拒絕在過熱區間無緩衝追買。</div>
+            </label>
+            <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" class="flt-check mt-0.5 w-4 h-4 rounded text-indigo-600" data-grp="mind" data-id="m3" checked />
+              <div><strong>駕馭市場先生：</strong>市場先生是僕人不是主人，拒絕情緒干擾與績效比較。</div>
+            </label>
+            <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" class="flt-check mt-0.5 w-4 h-4 rounded text-indigo-600" data-grp="mind" data-id="m4" checked />
+              <div><strong>能力圈原則：</strong>只在自己真正理解商業模式的範圍內行動。</div>
+            </label>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-3">
+          <h3 class="text-sm font-bold text-slate-900">實戰 Step 1 &amp; 2：先找對方向，尋找 30% 供需缺口（P.49, P.51）</h3>
+          <p class="text-xs text-slate-500">每天閱讀工商時報／經濟日報／商業雜誌＋產業研究報告，「先找到產業，再找公司」。</p>
+          <div class="space-y-2 text-xs">
+            <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-indigo-50/50 border border-indigo-200 cursor-pointer">
+              <input type="checkbox" class="flt-check mt-0.5 w-4 h-4 rounded text-indigo-600" data-grp="mind" data-id="s1" checked />
+              <div><strong>市場規模夠大：</strong>產業迎來工業革命等級或結構性剛性需求（如 AI 算力／伺服器／記憶體超級循環）。</div>
+            </label>
+            <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-indigo-50/50 border border-indigo-200 cursor-pointer">
+              <input type="checkbox" class="flt-check mt-0.5 w-4 h-4 rounded text-indigo-600" data-grp="mind" data-id="s2" checked />
+              <div><strong>供給缺口 ≥ 30%（關鍵觸發點）：</strong>供給明顯跟不上需求，具備漲價或訂單滿載動能（詳細數字其次，趨勢才是關鍵）。</div>
+            </label>
+            <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-indigo-50/50 border border-indigo-200 cursor-pointer">
+              <input type="checkbox" class="flt-check mt-0.5 w-4 h-4 rounded text-indigo-600" data-grp="mind" data-id="s3" checked />
+              <div><strong>競爭者不易進入：</strong>具備技術、資本、認證或客戶黏著度高進入門檻。</div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Layer 1 Quant + Layer 2 Moat Radar -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-6 bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-4">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">過濾器第一層（Step 3）：量化指標 — 矩陣選股 &amp; 財報快篩（P.22, P.52）</h3>
+            <p class="text-xs text-slate-500">先用客觀財務數據，初步篩除體質脆弱的企業</p>
+          </div>
+          <div class="space-y-1.5 text-xs">
+            <div class="font-bold text-indigo-700 mb-1">矩陣選股三大核心數據（P.22）</div>
+            <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" class="flt-check w-4 h-4 rounded text-indigo-600" data-grp="quant" data-id="q1" checked />
+              <span><strong>數據一：高 ROE（股東權益報酬率）</strong> — 驗證獲利效率（如緯穎達 33%–48%）</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" class="flt-check w-4 h-4 rounded text-indigo-600" data-grp="quant" data-id="q2" />
+              <span><strong>數據二：高自由現金流</strong> — 確保真實現金產出能力（擴產期須留意應收與存貨佔用）</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" class="flt-check w-4 h-4 rounded text-indigo-600" data-grp="quant" data-id="q3" checked />
+              <span><strong>數據三：穩健的資產負債表</strong> — 抵抗經濟寒冬與高利率壓力的防禦力</span>
+            </label>
+
+            <div class="font-bold text-indigo-700 pt-2 mb-1">Step 3 財報快速篩選 7 項檢查（P.52）</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" class="flt-check w-4 h-4 rounded text-indigo-600" data-grp="quant" data-id="f1" checked />
+                <span>營收持續成長</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" class="flt-check w-4 h-4 rounded text-indigo-600" data-grp="quant" data-id="f2" checked />
+                <span>獲利穩定</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" class="flt-check w-4 h-4 rounded text-indigo-600" data-grp="quant" data-id="f3" checked />
+                <span>三大利潤率穩定</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" class="flt-check w-4 h-4 rounded text-indigo-600" data-grp="quant" data-id="f4" checked />
+                <span>營收成長率 ≥ 1 倍（爆發拐點）</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" class="flt-check w-4 h-4 rounded text-indigo-600" data-grp="quant" data-id="f5" checked />
+                <span>帳上現金充足</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" class="flt-check w-4 h-4 rounded text-indigo-600" data-grp="quant" data-id="f6" checked />
+                <span>負債合理</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer sm:col-span-2">
+                <input type="checkbox" class="flt-check w-4 h-4 rounded text-indigo-600" data-grp="quant" data-id="f7" checked />
+                <span>股利政策穩定</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-sm font-bold text-slate-900">過濾器第二層：質化分析 — 六大企業護城河雷達（P.23）</h3>
+              <p class="text-xs text-slate-500">數字之外，企業必須擁有難以被競爭者摧毀的無形壁壘（1–5 分）</p>
+            </div>
+            <span id="moat-avg-badge" class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold">均分 4.5 / 5</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <label class="block">
+              <div class="flex justify-between font-medium text-slate-700"><span>1. 規模效應 (Scale)</span><span id="moat-v-1" class="font-bold text-indigo-700">5</span></div>
+              <input type="range" min="1" max="5" step="1" value="5" class="moat-slider w-full mt-1" data-idx="0" />
+            </label>
+            <label class="block">
+              <div class="flex justify-between font-medium text-slate-700"><span>2. 反向定位 (Counter-positioning)</span><span id="moat-v-2" class="font-bold text-indigo-700">4</span></div>
+              <input type="range" min="1" max="5" step="1" value="4" class="moat-slider w-full mt-1" data-idx="1" />
+            </label>
+            <label class="block">
+              <div class="flex justify-between font-medium text-slate-700"><span>3. 品牌價值 (Brand)</span><span id="moat-v-3" class="font-bold text-indigo-700">4</span></div>
+              <input type="range" min="1" max="5" step="1" value="4" class="moat-slider w-full mt-1" data-idx="2" />
+            </label>
+            <label class="block">
+              <div class="flex justify-between font-medium text-slate-700"><span>4. 用戶轉換成本 (Switching Costs)</span><span id="moat-v-4" class="font-bold text-indigo-700">5</span></div>
+              <input type="range" min="1" max="5" step="1" value="5" class="moat-slider w-full mt-1" data-idx="3" />
+            </label>
+            <label class="block">
+              <div class="flex justify-between font-medium text-slate-700"><span>5. 網路效應 (Network Effect)</span><span id="moat-v-5" class="font-bold text-indigo-700">4</span></div>
+              <input type="range" min="1" max="5" step="1" value="4" class="moat-slider w-full mt-1" data-idx="4" />
+            </label>
+            <label class="block">
+              <div class="flex justify-between font-medium text-slate-700"><span>6. 成本優勢 (Cost Advantage)</span><span id="moat-v-6" class="font-bold text-indigo-700">5</span></div>
+              <input type="range" min="1" max="5" step="1" value="5" class="moat-slider w-full mt-1" data-idx="5" />
+            </label>
+          </div>
+
+          <div class="relative h-56 w-full">
+            <canvas id="moatRadarChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Layer 3 / Step 4 -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-3">
+        <div>
+          <h3 class="text-sm font-bold text-slate-900">過濾器第三層（Step 4）：深入研究公司、經營者與總經防禦（P.24, P.38, P.52）</h3>
+          <p class="text-xs text-slate-500">「投資本質上是在投資老闆的賺錢能力與經營方法；有疑問可寫信給發言人。」</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs">
+          <label class="flex items-start gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
+            <input type="checkbox" class="flt-check mt-0.5 w-4 h-4 rounded text-indigo-600" data-grp="quant" data-id="l1" checked />
+            <div><strong>法說會資料驗證：</strong>管理層對未來產能、毛利率與資本支出的說明邏輯連貫。</div>
+          </label>
+          <label class="flex items-start gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
+            <input type="checkbox" class="flt-check mt-0.5 w-4 h-4 rounded text-indigo-600" data-grp="quant" data-id="l2" checked />
+            <div><strong>老闆發言與誠信紀錄：</strong>過往說到做到、不任意畫大餅，具長期策略眼光。</div>
+          </label>
+          <label class="flex items-start gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
+            <input type="checkbox" class="flt-check mt-0.5 w-4 h-4 rounded text-indigo-600" data-grp="quant" data-id="l3" checked />
+            <div><strong>經營理念與資本配置：</strong>資金優先投入高 ROE 本業擴張或合理回饋股東。</div>
+          </label>
+          <label class="flex items-start gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
+            <input type="checkbox" class="flt-check mt-0.5 w-4 h-4 rounded text-indigo-600" data-grp="quant" data-id="l4" checked />
+            <div><strong>資金運用與存貨管理（P.41）：</strong>存貨水位增加配合週轉天數下降＝備貨出貨先行指標。</div>
+          </label>
+          <label class="flex items-start gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
+            <input type="checkbox" class="flt-check mt-0.5 w-4 h-4 rounded text-indigo-600" data-grp="quant" data-id="l5" checked />
+            <div><strong>人才策略與企業文化：</strong>具備吸引頂尖工程／營運人才的長期競爭力。</div>
+          </label>
+          <label class="flex items-start gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
+            <input type="checkbox" class="flt-check mt-0.5 w-4 h-4 rounded text-indigo-600" data-grp="quant" data-id="l6" checked />
+            <div><strong>總經結構性護城河（P.38）：</strong>免受政策／關稅干擾（如 USMCA 零關稅或無可取代製程）。</div>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- TAB 4: SAFETY MARGIN P/E RULER & EXIT CALCULATOR                 -->
+    <!-- ================================================================ -->
+    <section id="tab-valuation" class="tab-panel hidden space-y-6">
+      <!-- Core Valuation & Safety Margin Ruler (P.26, P.39, P.53) -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-base font-bold text-slate-900">Step 5 核心估值模型 &amp; 安全邊際本益比尺（簡報 P.26, P.39, P.53）</h2>
+            <p class="text-xs text-slate-500">「評估是否值得買：預估未來 EPS × 合理本益比 ＝ 目標價」；12 倍便宜 / 15 倍合理 / 20 倍成長股可接受上限</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" id="btn-val-wiwynn" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-500 transition">
+              帶入 緯穎 (6669) 公開課案例
+            </button>
+            <button type="button" id="btn-val-tsmc" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-white hover:bg-slate-700 transition">
+              帶入 台積電 (2330) 2026/11 實況
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+          <label class="block">
+            <span class="font-semibold text-slate-700">標的名稱 / 代號</span>
+            <input id="val-name" type="text" value="緯穎 (6669) 2025/05 進場時點" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-bold" />
+          </label>
+          <label class="block">
+            <span class="font-semibold text-slate-700">目前 / 評估股價 (元)</span>
+            <input id="val-price" type="number" min="1" step="10" value="2125" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-bold" />
+          </label>
+          <label class="block">
+            <span class="font-semibold text-slate-700">預估未來 EPS (元)</span>
+            <input id="val-eps" type="number" min="0.1" step="1" value="160" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-bold" />
+          </label>
+          <label class="block">
+            <span class="font-semibold text-slate-700">預估 ROE (%)</span>
+            <input id="val-roe" type="number" min="0" step="1" value="39" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-bold" />
+          </label>
+          <label class="block">
+            <span class="font-semibold text-slate-700">自訂合理目標 PE (倍)</span>
+            <input id="val-target-pe" type="number" min="5" max="40" step="1" value="24" class="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-bold" />
+          </label>
+        </div>
+
+        <!-- 5 Key Price Anchor Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
+          <div class="p-3 rounded-xl bg-blue-50 border border-blue-200">
+            <div class="text-blue-800 font-bold">【12 倍本益比】便宜價</div>
+            <div id="val-p12" class="text-lg font-extrabold text-slate-900 mt-1">1,920 元</div>
+            <div class="text-[11px] text-blue-700 mt-0.5">Cheap · 一眼看出很便宜</div>
+          </div>
+          <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
+            <div class="text-emerald-800 font-bold">【15 倍本益比】合理價</div>
+            <div id="val-p15" class="text-lg font-extrabold text-slate-900 mt-1">2,400 元</div>
+            <div class="text-[11px] text-emerald-700 mt-0.5">Fair · 安全邊際建倉帶</div>
+          </div>
+          <div class="p-3 rounded-xl bg-amber-50 border border-amber-200">
+            <div class="text-amber-800 font-bold">【20 倍本益比】上限價</div>
+            <div id="val-p20" class="text-lg font-extrabold text-slate-900 mt-1">3,200 元</div>
+            <div class="text-[11px] text-amber-700 mt-0.5">Growth Cap · 買進上限</div>
+          </div>
+          <div class="p-3 rounded-xl bg-indigo-50 border border-indigo-200">
+            <div class="text-indigo-800 font-bold">【<span id="val-tpe-lbl">24</span> 倍】核心目標價</div>
+            <div id="val-ptarget" class="text-lg font-extrabold text-indigo-900 mt-1">3,840 元</div>
+            <div id="val-upside" class="text-[11px] font-semibold text-indigo-700 mt-0.5">潛在空間 +80.7%</div>
+          </div>
+          <div class="p-3 rounded-xl bg-rose-50 border border-rose-200">
+            <div class="text-rose-800 font-bold">【25–30 倍】過熱警戒</div>
+            <div id="val-p2530" class="text-lg font-extrabold text-rose-900 mt-1">4,000–4,800</div>
+            <div class="text-[11px] text-rose-700 mt-0.5">透支成長 · 觸發分批賣出</div>
+          </div>
+        </div>
+
+        <!-- Visual P/E Ruler -->
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+            <span class="font-bold text-slate-800">安全邊際本益比尺定位（8x ～ 32x）</span>
+            <span id="val-current-pe-pill" class="px-2.5 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-800">當前 PE：13.3x（落在 12x–15x 便宜合理好球帶）</span>
+          </div>
+          <div class="relative pt-6 pb-2">
+            <div id="val-ruler-pin" class="absolute top-0 -translate-x-1/2 flex flex-col items-center transition-all duration-200" style="left: 22%;">
+              <span id="val-ruler-pin-text" class="px-2 py-0.5 rounded bg-slate-900 text-white text-[11px] font-bold whitespace-nowrap">目前 13.3x</span>
+              <span class="w-0.5 h-3 bg-slate-900"></span>
+            </div>
+            <div class="h-4 w-full rounded-full overflow-hidden flex border border-slate-300">
+              <div class="h-full bg-blue-600" style="width: 16.7%;" title="8x–12x 極度便宜"></div>
+              <div class="h-full bg-emerald-500" style="width: 12.5%;" title="12x–15x 便宜至合理"></div>
+              <div class="h-full bg-amber-400" style="width: 20.8%;" title="15x–20x 成長股買進帶"></div>
+              <div class="h-full bg-orange-400" style="width: 20.8%;" title="20x–25x 持有達標區"></div>
+              <div class="h-full bg-rose-600" style="width: 29.2%;" title="25x–32x 過熱透支警戒"></div>
+            </div>
+            <div class="flex justify-between text-[11px] text-slate-500 font-medium mt-1.5">
+              <span>8x</span>
+              <span>12x (便宜)</span>
+              <span>15x (合理)</span>
+              <span>20x (上限)</span>
+              <span>25x (過熱紅線)</span>
+              <span>32x+</span>
+            </div>
+          </div>
+          <p id="val-advice-text" class="text-xs text-slate-700 leading-relaxed"></p>
+        </div>
+      </div>
+
+      <!-- Position Sizing + Dynamic Monitoring + Batch Exit -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Position Sizing (P.27, P.28) -->
+        <div class="lg:col-span-6 bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-4">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">部位控制雙維度天秤 &amp; 分批加碼防禦邏輯（P.27, P.28）</h3>
+            <p class="text-xs text-slate-500">「持股佔投資組合的比例大小，取決於未來成長規模 × 個人安心程度」</p>
+          </div>
+          <div class="space-y-3 text-xs">
+            <label class="block">
+              <div class="flex justify-between font-semibold text-slate-700">
+                <span>未來成長規模 (Future Growth Scale)</span>
+                <span id="pos-growth-val" class="text-indigo-700 font-bold">5 / 5（爆發性成長）</span>
+              </div>
+              <input id="pos-growth" type="range" min="1" max="5" step="1" value="5" class="w-full mt-1" />
+            </label>
+            <label class="block">
+              <div class="flex justify-between font-semibold text-slate-700">
+                <span>個人安心程度 (Peace of Mind · 對商業模式理解與抗波動度)</span>
+                <span id="pos-peace-val" class="text-indigo-700 font-bold">4 / 5（高度安心）</span>
+              </div>
+              <input id="pos-peace" type="range" min="1" max="5" step="1" value="4" class="w-full mt-1" />
+            </label>
+          </div>
+
+          <div id="pos-result-box" class="p-3.5 rounded-xl bg-indigo-50 border border-indigo-200 text-xs space-y-2"></div>
+
+          <!-- Dynamic Monitor 5-Point Checklist (P.29) -->
+          <div class="border-t border-slate-200 pt-3 space-y-2">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-bold text-slate-900">持有過程：動態監控系統 5 大必做清單（P.29）</h4>
+              <span id="mon-progress" class="text-[11px] font-semibold text-slate-600">0 / 5 項</span>
+            </div>
+            <div class="space-y-1.5 text-xs">
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" class="mon-check w-4 h-4 rounded text-indigo-600" data-mon="1" />
+                <span><strong>[檢視]</strong> 每月營收變化（確認成長拐點是否延續）</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" class="mon-check w-4 h-4 rounded text-indigo-600" data-mon="2" />
+                <span><strong>[深讀]</strong> 季報與年報細節（優先追蹤「存貨水位」與週轉天數）</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" class="mon-check w-4 h-4 rounded text-indigo-600" data-mon="3" />
+                <span><strong>[預估]</strong> 企業未來的獲利軌跡（動態修正預估 EPS 與目標價）</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" class="mon-check w-4 h-4 rounded text-indigo-600" data-mon="4" />
+                <span><strong>[反思]</strong> 護城河是否受損或產生裂痕？</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" class="mon-check w-4 h-4 rounded text-indigo-600" data-mon="5" />
+                <span><strong>[確認]</strong> ROE（股東權益報酬率）是否維持高水準？</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Exit Mechanism & Batch Selling (P.30, P.46) -->
+        <div class="lg:col-span-6 bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-sm font-bold text-slate-900">退場機制：啟動賣出的三大時機 &amp; 分批賣出試算（P.30, P.46）</h3>
+              <p class="text-xs text-slate-500">拒絕憑感覺出場，嚴格執行系統設定的 50% / 30% / 20% 分批賣出策略</p>
+            </div>
+            <span id="exit-trigger-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700">未觸發退場</span>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-rose-50/50 border border-rose-200 cursor-pointer">
+              <input type="checkbox" class="exit-check mt-0.5 w-4 h-4 rounded text-rose-600" data-exit="1" />
+              <div><strong>時機 1 · 基本面惡化：</strong>護城河崩塌或獲利能力永久衰退（應果斷執行退場，不抱幻想）。</div>
+            </label>
+            <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-amber-50/60 border border-amber-200 cursor-pointer">
+              <input type="checkbox" class="exit-check mt-0.5 w-4 h-4 rounded text-amber-600" data-exit="2" />
+              <div><strong>時機 2 · 估值極度過高：</strong>價格已遠遠透支未來數年成長（如緯穎超越 3,840 元目標價達 4,600 元）。</div>
+            </label>
+            <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-indigo-50/50 border border-indigo-200 cursor-pointer">
+              <input type="checkbox" class="exit-check mt-0.5 w-4 h-4 rounded text-indigo-600" data-exit="3" />
+              <div><strong>時機 3 · 發現更高報酬率標的：</strong>資金的機會成本考量，將資金轉向基期較低的新標的（P.46）。</div>
+            </label>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 text-xs">
+            <label class="block">
+              <span class="font-semibold text-slate-700">目前該標的持倉總市值（萬元）</span>
+              <input id="exit-position-val" type="number" min="0" step="50" value="600" class="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 bg-white font-bold" />
+            </label>
+            <div class="grid grid-cols-3 gap-2 text-center">
+              <div class="p-2.5 rounded-xl bg-white border border-slate-200">
+                <div class="text-slate-500">第 1 批賣出 (50%)</div>
+                <div id="exit-b1" class="text-base font-extrabold text-slate-900 mt-0.5">300 萬</div>
+                <div class="text-[10px] text-slate-500">先落袋收回一半</div>
+              </div>
+              <div class="p-2.5 rounded-xl bg-white border border-slate-200">
+                <div class="text-slate-500">第 2 批賣出 (30%)</div>
+                <div id="exit-b2" class="text-base font-extrabold text-slate-900 mt-0.5">180 萬</div>
+                <div class="text-[10px] text-slate-500">轉入現金蓄水池</div>
+              </div>
+              <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200">
+                <div class="text-emerald-800 font-semibold">第 3 批 / 保留底倉 (20%)</div>
+                <div id="exit-b3" class="text-base font-extrabold text-emerald-900 mt-0.5">120 萬</div>
+                <div class="text-[10px] text-emerald-700">跟隨趨勢奔跑免懊悔</div>
+              </div>
+            </div>
+            <p class="text-[11px] text-slate-600 leading-relaxed">
+              <strong>策略提示（P.30, P.46）：</strong>採取「分批賣出」並保留少部分底倉，可避免清倉後股價繼續狂飆造成心理懊悔，同時把前兩批 <strong>80% 獲利資金（<span id="exit-cash-back">480 萬</span>）</strong>回收注入「現金蓄水池」等待下一輪危機入市或新標的。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- TAB 5: WIWYNN (6669) CASE STUDY & DECISION MATRIX                -->
+    <!-- ================================================================ -->
+    <section id="tab-case" class="tab-panel hidden space-y-6">
+      <!-- Case Scorecard (P.34) -->
+      <div class="bg-slate-900 text-white rounded-2xl p-5 border border-slate-800 card-shadow space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">CASE STUDY: WIWYNN (6669 緯穎)</span>
+            <h2 class="text-lg font-bold mt-1">雷浩斯實戰案例拆解：從發現到退場的 4,000 萬獲利全週期（簡報 P.33–P.47）</h2>
+          </div>
+          <span class="text-xs text-slate-400">年度最高勝率與獲利示範標的</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700">
+            <div class="text-xs text-slate-400">總投入資金</div>
+            <div class="text-2xl sm:text-3xl font-extrabold text-amber-300 mt-1">6,000 萬</div>
+            <div class="text-xs text-slate-400 mt-1">隨營收與存貨驗證，分三階段規模化</div>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700">
+            <div class="text-xs text-slate-400">已實現獲利</div>
+            <div class="text-2xl sm:text-3xl font-extrabold text-emerald-300 mt-1">&gt; 4,000 萬</div>
+            <div class="text-xs text-slate-400 mt-1">12 月初超越目標價分批賣出多數部位</div>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700">
+            <div class="text-xs text-slate-400">投資報酬率</div>
+            <div class="text-2xl sm:text-3xl font-extrabold text-cyan-300 mt-1">~100%</div>
+            <div class="text-xs text-slate-400 mt-1">2,125 元建倉 → 4,600 元達標出場（後續達 5,315 元）</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4-Phase Timeline (P.35-P.46) -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-4">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">交易全週期四階段拆解（P.35–P.46）</h3>
+          <p class="text-xs text-slate-500">結合數據催化、總經防禦、估值底座與存貨領先指標的完整系統</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <span class="px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 font-bold">Phase 1 · 發現 (2025/05/06)</span>
+            <h4 class="text-sm font-bold text-slate-900">數據催化與初步建倉</h4>
+            <ul class="space-y-1 text-slate-700 list-disc list-inside">
+              <li><strong>爆發拐點：</strong>3 月營收 870 億，年增 <strong>+227%</strong>（P.36）。</li>
+              <li><strong>總經護城河：</strong>美墨加協定 <strong>USMCA 零關稅</strong>優勢，隔絕關稅戰毛利風險（P.38）。</li>
+              <li><strong>估值底座：</strong>預估 2025 EPS 160 元 × 合理 PE 24 倍（ROE 39% 支撐）＝ <strong>目標價 3,840 元</strong>（P.39）。</li>
+              <li><strong>進場動作：</strong>於 <strong>2,125 元</strong>（約 13.3x PE 安全邊際）初始建倉測試水位。</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold">Phase 2 · 擴大 (6 月中旬)</span>
+            <h4 class="text-sm font-bold text-slate-900">營收成長確認與加碼</h4>
+            <ul class="space-y-1 text-slate-700 list-disc list-inside">
+              <li><strong>數字提供信心：</strong>月營收持續顯著成長，驗證 AI 伺服器出貨暢旺。</li>
+              <li><strong>資金規模化：</strong>不一次性梭哈，依確認數據將部位擴大<strong>加碼至 4,000 萬</strong>（P.40）。</li>
+              <li><strong>均線與趨勢：</strong>5 月底股價上攻至 2,370 元後沿均線推進。</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <span class="px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-800 font-bold">Phase 3 · 追蹤 (財報季)</span>
+            <h4 class="text-sm font-bold text-slate-900">存貨領先指標 × 最終加碼</h4>
+            <ul class="space-y-1 text-slate-700 list-disc list-inside">
+              <li><strong>存貨透視營收（P.41–P.42）：</strong>2025 Q1 存貨佔總資產達 <strong>46.69%</strong>，存貨週轉天數降至 <strong>60.74 天</strong>，顯示客戶強勁備貨需求。</li>
+              <li><strong>連續三位數成長（P.43）：</strong>2025/07–11 單月營收連 5 月 YoY 維持 <strong>+150%～+198%</strong>。</li>
+              <li><strong>集中火力：</strong>最終<strong>加碼至 6,000 萬</strong>集中高勝率標的。</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-2">
+            <span class="px-2 py-0.5 rounded-full bg-emerald-600 text-white font-bold">Phase 4 · 退出 (12 月初)</span>
+            <h4 class="text-sm font-bold text-slate-900">達標出海與資金輪動</h4>
+            <ul class="space-y-1 text-slate-700 list-disc list-inside">
+              <li><strong>大幅超越目標價：</strong>12 月初股價達 <strong>4,600 元</strong>（遠超原始 3,840 元目標價，P.46）。</li>
+              <li><strong>分批賣出獲利：</strong>賣出多數部位，已實現獲利 <strong>&gt; 4,000 萬</strong>。</li>
+              <li><strong>雙軌再配置：</strong>多數獲利資金轉向基期更低的新標的，並<strong>保留少數底倉</strong>跟隨後續趨勢（2026/07 收盤達 5,315 元）。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wiwynn Financial Chart + Decision Matrix -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-6 bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-3">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">緯穎 (6669) 2021–2025 ROE 與年度 EPS 加速軌跡（簡報 P.37, P.45）</h3>
+            <p class="text-xs text-slate-500">連續五年獲利矩陣 A+，高 ROE 成為支撐 24 倍合理本益比的關鍵驅動因子</p>
+          </div>
+          <div class="relative h-64 w-full">
+            <canvas id="wiwynnCaseChart"></canvas>
+          </div>
+          <div class="text-[11px] text-slate-500 flex flex-wrap gap-x-4 gap-y-1 pt-1 border-t border-slate-100">
+            <span>• 單季 EPS 跳升：24Q4 <strong>37.92</strong> → 25Q1 <strong>52.70</strong> → 25Q2 <strong>65.23</strong> → 25Q3 <strong>82.92</strong> → 25Q4 <strong>74.21</strong> → 26Q1 <strong>75.95 元</strong></span>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-3">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">雷浩斯決策矩陣：可複製的高勝率四象限框架（簡報 P.47）</h3>
+            <p class="text-xs text-slate-500">任何台股潛力股皆可套用此四象限進行交叉驗證</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div class="p-4 rounded-xl bg-indigo-50/70 border border-indigo-200 space-y-1.5">
+              <div class="font-extrabold text-indigo-900">1. 數據催化（找拐點）</div>
+              <p class="text-slate-700 leading-relaxed">尋找產業供需缺口 ≥30%、單月營收出現兩倍數／三位數 (YoY) 爆發性成長的初期拐點。</p>
+            </div>
+            <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200 space-y-1.5">
+              <div class="font-extrabold text-emerald-900">2. 估值底座（算目標）</div>
+              <p class="text-slate-700 leading-relaxed">依據預估 EPS 與合理本益比（12x 便宜 / 15x 合理 / 20x 上限），計算明確目標價（需高 ROE 支撐）。</p>
+            </div>
+            <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200 space-y-1.5">
+              <div class="font-extrabold text-amber-900">3. 宏觀防禦（護城河）</div>
+              <p class="text-slate-700 leading-relaxed">確認企業具備免受總經干擾的結構性護城河（如 USMCA 零關稅、台積電先進製程絕對壟斷）。</p>
+            </div>
+            <div class="p-4 rounded-xl bg-cyan-50/70 border border-cyan-200 space-y-1.5">
+              <div class="font-extrabold text-cyan-900">4. 前瞻追蹤（管倉位）</div>
+              <p class="text-slate-700 leading-relaxed">透過季報「存貨水位」等領先指標持續驗證未來營收動能，分批加碼、達標分批賣出轉入蓄水池。</p>
+            </div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-900 text-slate-200 text-xs leading-relaxed">
+            <strong>終極境界 — 動態平衡（P.31）：</strong>「核心心法是不動搖的指南針（不變），而選股與交易策略則是適應地形的步伐（變動）。原則不變，策略靈活，才能順應時代的巨輪。」
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = 'leihaos_tw_overheat_dashboard_v1';
+
+    const PRESET_LIVE_1119 = {
+      label: '2026-11-19 台股去槓桿後實況',
+      tsmcPrice: 2140,
+      tsmcEps: 96,
+      sig2Score: 0,
+      marginBal: 5080,
+      fourLoans: 'cool',
+      kingPrice: 8730,
+      count1k: 18,
+      sig5Score: 0,
+      sig6Score: 0,
+      sig7Score: 0
+    };
+
+    const PRESET_730_PEAK = {
+      label: '7/30 公開課直播過熱峰值',
+      tsmcPrice: 2600,
+      tsmcEps: 95,
+      sig2Score: 1,
+      marginBal: 6200,
+      fourLoans: 'hot',
+      kingPrice: 10500,
+      count1k: 30,
+      sig5Score: 1,
+      sig6Score: 1,
+      sig7Score: 1
+    };
+
+    let state = {
+      ...PRESET_LIVE_1119,
+      sigChecks: {},
+      filterChecks: {
+        m1: true, m2: true, m3: true, m4: true, s1: true, s2: true, s3: true,
+        q1: true, q2: false, q3: true, f1: true, f2: true, f3: true, f4: true, f5: true, f6: true, f7: true,
+        l1: true, l2: true, l3: true, l4: true, l5: true, l6: true
+      },
+      moatScores: [5, 4, 4, 5, 4, 5],
+      monChecks: {},
+      exitChecks: {}
+    };
+
+    let gaugeChart = null;
+    let signalsChart = null;
+    let reservoirChart = null;
+    let moatRadarChart = null;
+    let wiwynnChart = null;
+
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.remove('hidden');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => el.classList.add('hidden'), 2800);
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {}
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          state = {
+            ...state,
+            ...parsed,
+            sigChecks: parsed.sigChecks || {},
+            filterChecks: parsed.filterChecks || state.filterChecks,
+            moatScores: Array.isArray(parsed.moatScores) && parsed.moatScores.length === 6 ? parsed.moatScores : state.moatScores,
+            monChecks: parsed.monChecks || {},
+            exitChecks: parsed.exitChecks || {}
+          };
+        }
+      } catch (e) {}
+    }
+
+    // ------------------------------------------------------------------
+    // 1. THERMOMETER SCORING ENGINE
+    // ------------------------------------------------------------------
+    function computeSignals() {
+      const pe = state.tsmcEps > 0 ? state.tsmcPrice / state.tsmcEps : 0;
+      const s1 = pe >= 25 ? 1 : (pe >= 20 ? 0.5 : 0);
+      const s2 = Number(state.sig2Score) || 0;
+
+      let s3 = 0;
+      if (state.marginBal >= 5800 || state.fourLoans === 'hot') {
+        s3 = 1;
+      } else if (state.marginBal >= 5000 || state.fourLoans === 'warm') {
+        s3 = 0.5;
+      } else {
+        s3 = 0;
+      }
+
+      let s4 = 0;
+      if (state.kingPrice >= 10000 || state.count1k >= 25) {
+        s4 = 1;
+      } else if (state.kingPrice >= 8000 || state.count1k >= 15) {
+        s4 = 0.5;
+      } else {
+        s4 = 0;
+      }
+
+      const s5 = Number(state.sig5Score) || 0;
+      const s6 = Number(state.sig6Score) || 0;
+      const s7 = Number(state.sig7Score) || 0;
+
+      const scores = [s1, s2, s3, s4, s5, s6, s7];
+      const total = scores.reduce((a, b) => a + b, 0);
+      const tempC = Math.round((total / 7) * 110);
+      return { pe, scores, total, tempC };
+    }
+
+    function getRegimeInfo(total, tempC) {
+      if (total <= 1.5) {
+        return {
+          name: '理性冷靜區',
+          eqRange: '75%–90%',
+          cashRange: '10%–25%',
+          eqMid: 82,
+          cashMid: 18,
+          badgeHeaderClass: 'bg-emerald-500/20 text-emerald-200 border-emerald-400/30',
+          pillClass: 'bg-emerald-100 text-emerald-800',
+          scoreColor: 'text-emerald-600',
+          actionPill: '行動指令：危機入市前緣・依安全邊際分批佈局',
+          actionPillClass: 'bg-emerald-500/20 text-emerald-200 border-emerald-400/40',
+          eqTitle: '機會方程式啟動（低檔佈局期）',
+          eqDesc: '[市場回檔] + [充足現金] ＝ 可動用現金蓄水池分批承接 12–15 倍安全邊際好公司',
+          diagText: `目前溫度僅 ${tempC}°C（${total.toFixed(1)}/7 燈），過熱泡沫與高槓桿已大幅清洗，市場先生情緒偏冷靜。`,
+          nextText: '打開「現金蓄水池」閘門，依 30% / 40% / 30% 節奏分批買進通過三層過濾器且 PE ≤ 15–20 倍之標的。',
+          highlightPhase: 'bear'
+        };
+      }
+      if (total <= 3.5) {
+        return {
+          name: '溫熱穩健區',
+          eqRange: '60%–75%',
+          cashRange: '25%–40%',
+          eqMid: 65,
+          cashMid: 35,
+          badgeHeaderClass: 'bg-amber-500/20 text-amber-200 border-amber-400/30',
+          pillClass: 'bg-amber-100 text-amber-800',
+          scoreColor: 'text-amber-600',
+          actionPill: '行動指令：守住現金蓄水池・不盲目接刀・篩選安全邊際',
+          actionPillClass: 'bg-amber-500/20 text-amber-200 border-amber-400/40',
+          eqTitle: '轉向機會方程式前緣',
+          eqDesc: '[市場回檔] + [充足現金] ＝ 靜待融資徹底清洗與台積電 PE 回落至 20 倍以下之買點',
+          diagText: `目前溫度 ${tempC}°C（${total.toFixed(1)}/7 燈），處於高檔去槓桿降溫階段；權值估值與融資籌碼仍需觀察是否充分沉澱。`,
+          nextText: '維持 25%–40% 現金蓄水池不耗盡子彈；優先做功課篩選「供需缺口 ≥ 30%」與「高 ROE」好公司，等安全邊際浮現。',
+          highlightPhase: 'bear'
+        };
+      }
+      if (total <= 5.5) {
+        return {
+          name: '過熱警戒區',
+          eqRange: '40%–55%',
+          cashRange: '45%–60%',
+          eqMid: 48,
+          cashMid: 52,
+          badgeHeaderClass: 'bg-orange-500/20 text-orange-200 border-orange-400/30',
+          pillClass: 'bg-orange-100 text-orange-800',
+          scoreColor: 'text-orange-600',
+          actionPill: '行動指令：提高警覺・停止追高・分批獲利了結補現金',
+          actionPillClass: 'bg-orange-500/20 text-orange-200 border-orange-400/40',
+          eqTitle: '風險逐漸大於報酬',
+          eqDesc: '股價開始顯著偏離基本面，向上空間有限，須嚴禁新開高成本部位與任何四貸槓桿',
+          diagText: `目前溫度升至 ${tempC}°C（${total.toFixed(1)}/7 燈），多項市場與情緒指標亮燈，高成本建倉風險快速攀升。`,
+          nextText: '執行「上漲的多頭－做好準備者」紀律：逢高分批減碼達標個股，將現金蓄水池拉升至 45%–60%。',
+          highlightPhase: 'bull'
+        };
+      }
+      return {
+        name: '極度過熱危險區',
+        eqRange: '20%–35%',
+        cashRange: '65%–80%',
+        eqMid: 28,
+        cashMid: 72,
+        badgeHeaderClass: 'bg-rose-500/20 text-rose-200 border-rose-400/30',
+        pillClass: 'bg-rose-100 text-rose-800',
+        scoreColor: 'text-rose-600',
+        actionPill: '行動指令：極度過熱警報・立即去槓桿・大舉保留現金蓄水池',
+        actionPillClass: 'bg-rose-500/20 text-rose-200 border-rose-400/40',
+        eqTitle: '風險方程式完全觸發（絕頂風險）',
+        eqDesc: '[過熱市場] + [極限槓桿] ＝ 絕頂的風險！隨時可能觸發物理性去槓桿瀑布效應',
+        diagText: `目前溫度飆達 ${tempC}°C（${total.toFixed(1)}/7 燈）！台積電本益比進入 25–30 倍且群眾極端樂觀，正是 P.08「七大過熱警訊」全開狀態。`,
+        nextText: '嚴守巴菲特第一條規則「不要賠錢」：立即解除融資與四貸同堂槓桿，分批賣出高估部位，保留 65%–80% 現金等待去槓桿回檔。',
+        highlightPhase: 'bull'
+      };
+    }
+
+    function scoreBadgeMeta(score) {
+      if (score >= 1) return { label: '1.0 分 · 紅燈', cls: 'bg-rose-100 text-rose-800', color: '#ef4444' };
+      if (score >= 0.5) return { label: '0.5 分 · 黃燈', cls: 'bg-amber-100 text-amber-800', color: '#f59e0b' };
+      return { label: '0 分 · 綠燈', cls: 'bg-emerald-100 text-emerald-800', color: '#10b981' };
+    }
+
+    // Custom needle plugin for Thermometer Gauge
+    const thermometerNeedlePlugin = {
+      id: 'thermometerNeedle',
+      afterDatasetDraw(chart) {
+        const { ctx, chartArea } = chart;
+        if (!chartArea) return;
+        const tempC = chart.config._tempC || 0;
+        const meta = chart.getDatasetMeta(0);
+        if (!meta || !meta.data || !meta.data.length) return;
+
+        const arc = meta.data[0];
+        const cx = arc.x;
+        const cy = arc.y;
+        const outerR = arc.outerRadius;
+        const innerR = arc.innerRadius;
+        const needleLen = (outerR + innerR) / 2 + 8;
+
+        // Angle: -Math.PI (0C) to 0 (120C)
+        const clamped = Math.max(0, Math.min(120, tempC));
+        const angle = -Math.PI + (clamped / 120) * Math.PI;
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(angle);
+        ctx.beginPath();
+        ctx.moveTo(0, -4);
+        ctx.lineTo(needleLen, 0);
+        ctx.lineTo(0, 4);
+        ctx.closePath();
+        ctx.fillStyle = '#0f172a';
+        ctx.fill();
+        ctx.restore();
+
+        // Center hub & temperature text
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+        ctx.fillStyle = '#0f172a';
+        ctx.fill();
+
+        ctx.font = '800 22px Inter, "Noto Sans TC", sans-serif';
+        ctx.fillStyle = clamped >= 90 ? '#e11d48' : (clamped >= 60 ? '#ea580c' : (clamped >= 31 ? '#d97706' : '#059669'));
+        ctx.textAlign = 'center';
+        ctx.fillText(`${tempC}°C`, cx, cy - 22);
+        ctx.restore();
+      }
+    };
+
+    function renderThermometerViews() {
+      const { pe, scores, total, tempC } = computeSignals();
+      const regime = getRegimeInfo(total, tempC);
+
+      // Header Badge
+      const hBadge = document.getElementById('header-temp-badge');
+      hBadge.textContent = `${total.toFixed(1)} / 7 燈 · ${tempC}°C · ${regime.name}`;
+      hBadge.className = `inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${regime.badgeHeaderClass}`;
+
+      // KPIs
+      const kpiScore = document.getElementById('kpi-score');
+      kpiScore.textContent = total.toFixed(1);
+      kpiScore.className = `text-3xl font-extrabold ${regime.scoreColor}`;
+
+      const kpiTempPill = document.getElementById('kpi-temp-pill');
+      kpiTempPill.textContent = `${tempC}°C`;
+      kpiTempPill.className = `ml-auto px-2 py-0.5 rounded-full text-xs font-bold ${regime.pillClass}`;
+
+      document.getElementById('kpi-regime-text').textContent = `${regime.name}（溫度計讀數 ${tempC}°C / 120°C）`;
+      document.getElementById('kpi-equity-range').textContent = regime.eqRange;
+      document.getElementById('kpi-cash-range').textContent = `建議保留 ${regime.cashRange} 現金蓄水池`;
+
+      document.getElementById('kpi-tsmc-pe').textContent = `${pe.toFixed(1)}x`;
+      document.getElementById('kpi-tsmc-detail').textContent = `股價 ${state.tsmcPrice.toLocaleString()} 元 / EPS ${state.tsmcEps} 元（過熱紅線：25–30 倍）`;
+      const tsmcBadge = document.getElementById('kpi-tsmc-badge');
+      if (scores[0] === 1) {
+        tsmcBadge.textContent = '紅燈過熱 (≥25x)';
+        tsmcBadge.className = 'px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 font-semibold';
+      } else if (scores[0] === 0.5) {
+        tsmcBadge.textContent = '黃燈偏溫 (20–24.9x)';
+        tsmcBadge.className = 'px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-semibold';
+      } else {
+        tsmcBadge.textContent = '綠燈安全 (<20x)';
+        tsmcBadge.className = 'px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold';
+      }
+
+      document.getElementById('kpi-equation-title').textContent = regime.eqTitle;
+      document.getElementById('kpi-equation-desc').textContent = regime.eqDesc;
+
+      // Executive banner
+      document.getElementById('exec-scenario-tag').textContent = state.label || '即時模擬判讀';
+      const execPill = document.getElementById('exec-action-pill');
+      execPill.textContent = regime.actionPill;
+      execPill.className = `px-3 py-1 rounded-full text-xs font-bold border shrink-0 ${regime.actionPillClass}`;
+      document.getElementById('exec-diag-text').textContent = regime.diagText;
+      document.getElementById('exec-next-text').textContent = regime.nextText;
+
+      document.getElementById('checklist-total-score').textContent = total.toFixed(1);
+      const gaugePill = document.getElementById('gauge-zone-pill');
+      gaugePill.textContent = `${tempC}°C · ${regime.name}`;
+      gaugePill.className = `px-2.5 py-0.5 rounded-full text-xs font-bold ${regime.pillClass}`;
+
+      // Individual Signal Badges
+      const sigBadges = [
+        { id: 'sig1-badge', score: scores[0], extra: `(${pe.toFixed(1)}x)` },
+        { id: 'sig2-badge', score: scores[1], extra: '' },
+        { id: 'sig3-badge', score: scores[2], extra: `(${state.marginBal.toLocaleString()}億)` },
+        { id: 'sig4-badge', score: scores[3], extra: `(${state.kingPrice.toLocaleString()}元)` },
+        { id: 'sig5-badge', score: scores[4], extra: '' },
+        { id: 'sig6-badge', score: scores[5], extra: '' },
+        { id: 'sig7-badge', score: scores[6], extra: '' }
+      ];
+      sigBadges.forEach(b => {
+        const meta = scoreBadgeMeta(b.score);
+        const el = document.getElementById(b.id);
+        el.textContent = `${meta.label}${b.extra ? ' ' + b.extra : ''}`;
+        el.className = `px-2.5 py-0.5 rounded-full text-xs font-bold ${meta.cls}`;
+      });
+
+      // Sync segmented button visual state for signals 2, 5, 6, 7
+      const segValMap = { '2': state.sig2Score, '5': state.sig5Score, '6': state.sig6Score, '7': state.sig7Score };
+      document.querySelectorAll('.sig-seg-btn').forEach(btn => {
+        const sKey = btn.dataset.sig;
+        const val = Number(btn.dataset.score);
+        const active = Number(segValMap[sKey]) === val;
+        if (active) {
+          const activeColor = val === 1
+            ? 'bg-rose-600 text-white border-rose-600'
+            : (val === 0.5 ? 'bg-amber-500 text-white border-amber-500' : 'bg-emerald-600 text-white border-emerald-600');
+          btn.className = `sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition ${activeColor}`;
+        } else {
+          btn.className = 'sig-seg-btn px-2 py-2 rounded-lg font-semibold border transition bg-white text-slate-600 border-slate-300 hover:bg-slate-100';
+        }
+      });
+
+      // Highlight P.11 table row
+      const bullRow = document.getElementById('row-mech-bull');
+      const bearRow = document.getElementById('row-mech-bear');
+      bullRow.className = regime.highlightPhase === 'bull' ? 'bg-amber-50/70' : '';
+      bearRow.className = regime.highlightPhase === 'bear' ? 'bg-emerald-50/50' : '';
+
+      // Update Gauge Chart
+      const gaugeCtx = document.getElementById('thermometerGaugeChart').getContext('2d');
+      if (gaugeChart) {
+        gaugeChart.config._tempC = tempC;
+        gaugeChart.update();
+      } else {
+        gaugeChart = new Chart(gaugeCtx, {
+          type: 'doughnut',
+          data: {
+            labels: ['理性冷靜 (0–40°C)', '溫熱穩健 (40–70°C)', '過熱警戒 (70–95°C)', '極度過熱 (95–120°C)'],
+            datasets: [{
+              data: [40, 30, 25, 25],
+              backgroundColor: ['#10b981', '#f59e0b', '#f97316', '#e11d48'],
+              borderWidth: 2,
+              borderColor: '#ffffff'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            circumference: 180,
+            rotation: 270,
+            cutout: '72%',
+            plugins: {
+              legend: { display: false },
+              tooltip: { enabled: true }
+            }
+          },
+          plugins: [thermometerNeedlePlugin]
+        });
+        gaugeChart.config._tempC = tempC;
+        gaugeChart.update();
+      }
+
+      // Update 7 Signals Bar Chart
+      const barColors = scores.map(s => scoreBadgeMeta(s).color);
+      const sigCtx = document.getElementById('signalsBarChart').getContext('2d');
+      if (signalsChart) {
+        signalsChart.data.datasets[0].data = scores;
+        signalsChart.data.datasets[0].backgroundColor = barColors;
+        signalsChart.update();
+      } else {
+        signalsChart = new Chart(sigCtx, {
+          type: 'bar',
+          data: {
+            labels: [
+              '① 台積電 P/E 25–30x',
+              '② 主動式 ETF 狂熱',
+              '③ 四貸同堂 / 融資',
+              '④ 萬元股王 / 高價股',
+              '⑤ 貪婪求連續漲停',
+              '⑥ 盲目樂觀排斥風險',
+              '⑦ 績效競賽焦慮'
+            ],
+            datasets: [{
+              label: '警訊燈號強度',
+              data: scores,
+              backgroundColor: barColors,
+              borderRadius: 6
+            }]
+          },
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: { min: 0, max: 1, ticks: { stepSize: 0.5 } }
+            },
+            plugins: { legend: { display: false } }
+          }
+        });
+      }
+
+      // Sync Reservoir view because target cash depends on regime
+      renderReservoirViews(regime);
+    }
+
+    // ------------------------------------------------------------------
+    // 2. RESERVOIR & DELEVERAGING STRESS TEST
+    // ------------------------------------------------------------------
+    function renderReservoirViews(regimeOverride) {
+      const { total, tempC } = computeSignals();
+      const regime = regimeOverride || getRegimeInfo(total, tempC);
+
+      const capRef = Math.max(0, Number(document.getElementById('res-capital').value) || 0);
+      const stockVal = Math.max(0, Number(document.getElementById('res-stock').value) || 0);
+      const cashVal = Math.max(0, Number(document.getElementById('res-cash').value) || 0);
+      const dMargin = Math.max(0, Number(document.getElementById('res-debt-margin').value) || 0);
+      const dPledge = Math.max(0, Number(document.getElementById('res-debt-pledge').value) || 0);
+      const dCredit = Math.max(0, Number(document.getElementById('res-debt-credit').value) || 0);
+      const dMortgage = Math.max(0, Number(document.getElementById('res-debt-mortgage').value) || 0);
+
+      const secDebt = dMargin + dPledge;
+      const totalDebt = secDebt + dCredit + dMortgage;
+      const totalAssets = stockVal + cashVal;
+      const netWorth = totalAssets - totalDebt;
+      const leverageRatio = netWorth > 0 ? (stockVal / netWorth) : (stockVal > 0 ? 99 : 0);
+      const actualCashPct = totalAssets > 0 ? (cashVal / totalAssets) * 100 : 0;
+      const targetCashAmt = Math.round((netWorth > 0 ? netWorth : capRef) * (regime.cashMid / 100));
+      const targetStockAmt = Math.round((netWorth > 0 ? netWorth : capRef) * (regime.eqMid / 100));
+
+      // Diagnostic box
+      const diagEl = document.getElementById('res-diag-box');
+      const debtTypesCount = [dMargin, dPledge, dCredit, dMortgage].filter(v => v > 0).length;
+      if (totalDebt > 0 && (leverageRatio >= 1.4 || debtTypesCount >= 3 || actualCashPct < regime.cashMid - 15)) {
+        diagEl.className = 'p-4 rounded-xl border bg-rose-50 border-rose-200 text-xs space-y-1.5 text-rose-900';
+        diagEl.innerHTML = `
+          <div class="font-bold text-rose-800">🚨 槓桿過高 / 蓄水池嚴重不足警報（已動用 ${debtTypesCount} 種借貸）</div>
+          <div>總資產 <strong>${totalAssets.toLocaleString()} 萬</strong> ｜ 總負債 <strong>${totalDebt.toLocaleString()} 萬</strong> ｜ 實質自有淨值 <strong>${netWorth.toLocaleString()} 萬</strong>（真實槓桿 <strong>${leverageRatio.toFixed(2)}x</strong>）</div>
+          <div>目前現金佔總資產 <strong>${actualCashPct.toFixed(1)}%</strong>，遠低於當前「${regime.name}」建議現金水位 <strong>${regime.cashMid}%（約 ${targetCashAmt.toLocaleString()} 萬）</strong>。遇市場去槓桿恐觸發骨牌追繳！</div>
+        `;
+      } else if (actualCashPct < regime.cashMid - 5) {
+        diagEl.className = 'p-4 rounded-xl border bg-amber-50 border-amber-200 text-xs space-y-1.5 text-amber-900';
+        diagEl.innerHTML = `
+          <div class="font-bold text-amber-800">⚠️ 現金蓄水池偏低（缺口約 ${Math.max(0, targetCashAmt - cashVal).toLocaleString()} 萬）</div>
+          <div>實質自有淨值 <strong>${netWorth.toLocaleString()} 萬</strong>（槓桿 <strong>${leverageRatio.toFixed(2)}x</strong>）｜ 現金占比 <strong>${actualCashPct.toFixed(1)}%</strong> vs. 建議 <strong>${regime.cashMid}%</strong>。</div>
+          <div>建議逢反彈分批獲利了結部分高估值持股，補足蓄水池水位以應對波動。</div>
+        `;
+      } else {
+        diagEl.className = 'p-4 rounded-xl border bg-emerald-50 border-emerald-200 text-xs space-y-1.5 text-emerald-900';
+        diagEl.innerHTML = `
+          <div class="font-bold text-emerald-800">✅ 蓄水池充足・安全邊際結構健康</div>
+          <div>實質自有淨值 <strong>${netWorth.toLocaleString()} 萬</strong>（真實槓桿 <strong>${leverageRatio.toFixed(2)}x</strong>）｜ 目前現金 <strong>${cashVal.toLocaleString()} 萬（${actualCashPct.toFixed(1)}%）</strong>，符合「${regime.name}」建議（${regime.cashRange}）。</div>
+          <div>當市場發生去槓桿瀑布效應時，你屬於「做好準備者」，可從容開閘吸收低價優質資產。</div>
+        `;
+      }
+
+      // Bullets
+      document.getElementById('res-deployable-badge').textContent = `可用子彈：${cashVal.toLocaleString()} 萬`;
+      document.getElementById('res-bullet-1').textContent = `${Math.round(cashVal * 0.30).toLocaleString()} 萬`;
+      document.getElementById('res-bullet-2').textContent = `${Math.round(cashVal * 0.40).toLocaleString()} 萬`;
+      document.getElementById('res-bullet-3').textContent = `${Math.round(cashVal * 0.30).toLocaleString()} 萬`;
+
+      // Stress Test Table
+      const scenarios = [
+        { label: '溫和修正 (-15%)', drop: 0.15 },
+        { label: '去槓桿中度回檔 (-25%)', drop: 0.25 },
+        { label: '恐慌瀑布崩盤 (-35%)', drop: 0.35 }
+      ];
+      document.getElementById('stress-tbody').innerHTML = scenarios.map(sc => {
+        const postStock = stockVal * (1 - sc.drop);
+        const postNet = postStock + cashVal - totalDebt;
+        const netDrawdownPct = netWorth > 0 ? ((postNet - netWorth) / netWorth) * 100 : -100;
+        let maintText = '無證券槓桿 (∞ 安全)';
+        let maintCls = 'text-emerald-700 font-semibold';
+        let verdict = '✅ 零斷頭風險・可用現金分批接好股';
+        let verdictCls = 'bg-emerald-100 text-emerald-800';
+
+        if (secDebt > 0) {
+          const maint = (postStock / secDebt) * 100;
+          maintText = `${maint.toFixed(1)}%`;
+          if (maint < 130) {
+            maintCls = 'text-rose-700 font-extrabold';
+            verdict = '🚨 跌破 130% 追繳紅線！觸發物理性強制斷頭';
+            verdictCls = 'bg-rose-100 text-rose-800';
+          } else if (maint < 145) {
+            maintCls = 'text-amber-700 font-bold';
+            verdict = '⚠️ 逼近 130% 追繳邊緣・須立即補繳或降槓桿';
+            verdictCls = 'bg-amber-100 text-amber-800';
+          } else {
+            maintCls = 'text-slate-700 font-semibold';
+            verdict = '尚高於 130%，但仍受負債利息與波動壓力';
+            verdictCls = 'bg-slate-100 text-slate-700';
+          }
+        } else if (totalDebt > 0 && postNet < capRef * 0.6) {
+          verdict = '⚠️ 雖無證券追繳，但信貸/房貸放大淨值虧損';
+          verdictCls = 'bg-amber-100 text-amber-800';
+        }
+
+        return `
+          <tr>
+            <td class="py-2.5 pr-4 font-bold text-slate-900 whitespace-nowrap">${sc.label}</td>
+            <td class="py-2.5 pr-4 whitespace-nowrap">${Math.round(postStock).toLocaleString()} 萬</td>
+            <td class="py-2.5 pr-4 whitespace-nowrap font-bold ${postNet <= 0 ? 'text-rose-700' : 'text-slate-900'}">${Math.round(postNet).toLocaleString()} 萬</td>
+            <td class="py-2.5 pr-4 whitespace-nowrap font-semibold text-rose-700">${netDrawdownPct.toFixed(1)}%</td>
+            <td class="py-2.5 pr-4 whitespace-nowrap ${maintCls}">${maintText}</td>
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded-full text-xs font-bold ${verdictCls}">${verdict}</span></td>
+          </tr>
+        `;
+      }).join('');
+
+      // Chart
+      const resCtx = document.getElementById('reservoirChart').getContext('2d');
+      const actualData = [stockVal, cashVal, totalDebt];
+      const targetData = [targetStockAmt, targetCashAmt, 0];
+      if (reservoirChart) {
+        reservoirChart.data.datasets[0].data = actualData;
+        reservoirChart.data.datasets[1].data = targetData;
+        reservoirChart.update();
+      } else {
+        reservoirChart = new Chart(resCtx, {
+          type: 'bar',
+          data: {
+            labels: ['股票持倉市值', '現金蓄水池', '四貸總負債'],
+            datasets: [
+              { label: '目前實際 (萬元)', data: actualData, backgroundColor: ['#4f46e5', '#10b981', '#ef4444'], borderRadius: 6 },
+              { label: '溫度計建議 (萬元)', data: targetData, backgroundColor: ['rgba(79,70,229,0.25)', 'rgba(16,185,129,0.25)', 'rgba(239,68,68,0.15)'], borderColor: ['#4f46e5', '#10b981', '#ef4444'], borderWidth: 1.5, borderRadius: 6 }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+            scales: { y: { beginAtZero: true } }
+          }
+        });
+      }
+    }
+
+    // ------------------------------------------------------------------
+    // 3. 3-LAYER FILTER & 5 STEPS
+    // ------------------------------------------------------------------
+    function renderFilterViews() {
+      const mindCbs = Array.from(document.querySelectorAll('.flt-check[data-grp="mind"]'));
+      const quantCbs = Array.from(document.querySelectorAll('.flt-check[data-grp="quant"]'));
+      const mindPass = mindCbs.filter(c => c.checked).length;
+      const quantPass = quantCbs.filter(c => c.checked).length;
+
+      document.getElementById('flt-score-mind').textContent = `${mindPass} / ${mindCbs.length}`;
+      document.getElementById('flt-score-quant').textContent = `${quantPass} / ${quantCbs.length}`;
+
+      const moatAvg = state.moatScores.reduce((a, b) => a + b, 0) / 6;
+      document.getElementById('moat-avg-badge').textContent = `均分 ${moatAvg.toFixed(1)} / 5`;
+
+      const vBox = document.getElementById('flt-verdict-box');
+      const vSub = document.getElementById('flt-verdict-sub');
+      const totalChecked = mindPass + quantPass;
+      const totalItems = mindCbs.length + quantCbs.length;
+      if (totalChecked >= 18 && moatAvg >= 3.8) {
+        vBox.className = 'p-2.5 rounded-lg border bg-emerald-50 border-emerald-200';
+        vBox.firstElementChild.textContent = '綜合判定：高勝率好公司（通過）';
+        vBox.firstElementChild.className = 'text-emerald-800 font-bold';
+        vSub.textContent = `通過 ${totalChecked}/${totalItems} 項 · 護城河 ${moatAvg.toFixed(1)}/5 · 可進估值計算`;
+      } else if (totalChecked >= 12 && moatAvg >= 3.0) {
+        vBox.className = 'p-2.5 rounded-lg border bg-amber-50 border-amber-200';
+        vBox.firstElementChild.textContent = '綜合判定：列入觀察名單';
+        vBox.firstElementChild.className = 'text-amber-800 font-bold';
+        vSub.textContent = `通過 ${totalChecked}/${totalItems} 項 · 護城河 ${moatAvg.toFixed(1)}/5 · 須補足關鍵驗證`;
+      } else {
+        vBox.className = 'p-2.5 rounded-lg border bg-rose-50 border-rose-200';
+        vBox.firstElementChild.textContent = '綜合判定：未達標 / 剔除';
+        vBox.firstElementChild.className = 'text-rose-800 font-bold';
+        vSub.textContent = `僅通過 ${totalChecked}/${totalItems} 項 · 護城河 ${moatAvg.toFixed(1)}/5 · 不符合高勝率矩陣`;
+      }
+
+      const moatCtx = document.getElementById('moatRadarChart').getContext('2d');
+      if (moatRadarChart) {
+        moatRadarChart.data.datasets[0].data = state.moatScores;
+        moatRadarChart.update();
+      } else {
+        moatRadarChart = new Chart(moatCtx, {
+          type: 'radar',
+          data: {
+            labels: ['1. 規模效應', '2. 反向定位', '3. 品牌價值', '4. 轉換成本', '5. 網路效應', '6. 成本優勢'],
+            datasets: [{
+              label: '護城河強度 (1–5)',
+              data: state.moatScores,
+              backgroundColor: 'rgba(217, 119, 6, 0.22)',
+              borderColor: '#d97706',
+              pointBackgroundColor: '#d97706',
+              borderWidth: 2
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: { r: { min: 0, max: 5, ticks: { stepSize: 1 } } },
+            plugins: { legend: { display: false } }
+          }
+        });
+      }
+    }
+
+    // ------------------------------------------------------------------
+    // 4. VALUATION RULER, POSITION SIZING & BATCH EXIT
+    // ------------------------------------------------------------------
+    function renderValuationAndExit() {
+      const price = Math.max(0.01, Number(document.getElementById('val-price').value) || 0.01);
+      const eps = Math.max(0.01, Number(document.getElementById('val-eps').value) || 0.01);
+      const roe = Number(document.getElementById('val-roe').value) || 0;
+      const targetPe = Math.max(1, Number(document.getElementById('val-target-pe').value) || 24);
+
+      const p12 = Math.round(eps * 12);
+      const p15 = Math.round(eps * 15);
+      const p20 = Math.round(eps * 20);
+      const pTarget = Math.round(eps * targetPe);
+      const p25 = Math.round(eps * 25);
+      const p30 = Math.round(eps * 30);
+
+      const curPe = price / eps;
+      const upsidePct = ((pTarget - price) / price) * 100;
+
+      document.getElementById('val-p12').textContent = `${p12.toLocaleString()} 元`;
+      document.getElementById('val-p15').textContent = `${p15.toLocaleString()} 元`;
+      document.getElementById('val-p20').textContent = `${p20.toLocaleString()} 元`;
+      document.getElementById('val-tpe-lbl').textContent = targetPe;
+      document.getElementById('val-ptarget').textContent = `${pTarget.toLocaleString()} 元`;
+      document.getElementById('val-upside').textContent = `潛在空間 ${upsidePct >= 0 ? '+' : ''}${upsidePct.toFixed(1)}%（ROE ${roe}% 支撐）`;
+      document.getElementById('val-p2530').textContent = `${p25.toLocaleString()}–${p30.toLocaleString()}`;
+
+      const pinPct = Math.max(2, Math.min(98, ((curPe - 8) / (32 - 8)) * 100));
+      document.getElementById('val-ruler-pin').style.left = `${pinPct.toFixed(1)}%`;
+      document.getElementById('val-ruler-pin-text').textContent = `目前 ${curPe.toFixed(1)}x`;
+
+      const pePill = document.getElementById('val-current-pe-pill');
+      const adviceEl = document.getElementById('val-advice-text');
+      if (curPe <= 12) {
+        pePill.textContent = `當前 PE：${curPe.toFixed(1)}x（≤12x 極度便宜好球帶）`;
+        pePill.className = 'px-2.5 py-0.5 rounded-full font-bold bg-blue-100 text-blue-800';
+        adviceEl.textContent = '估值位於【12 倍便宜價】以下，符合巴菲特「一眼就能看出很便宜」重倉安全邊際，確認護城河無虞即可啟動分批佈局。';
+      } else if (curPe <= 15) {
+        pePill.textContent = `當前 PE：${curPe.toFixed(1)}x（12x–15x 便宜至合理安全邊際）`;
+        pePill.className = 'px-2.5 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-800';
+        adviceEl.textContent = `估值處於【12–15 倍合理安全邊際】（近似緯穎 2025/05 以 13.3x 進場位置），具備充裕犯錯緩衝與向上空間 (${upsidePct >= 0 ? '+' : ''}${upsidePct.toFixed(1)}%)。`;
+      } else if (curPe <= 20) {
+        pePill.textContent = `當前 PE：${curPe.toFixed(1)}x（15x–20x 成長股可接受買進區）`;
+        pePill.className = 'px-2.5 py-0.5 rounded-full font-bold bg-amber-100 text-amber-800';
+        adviceEl.textContent = '估值介於【15–20 倍成長股買進上限】，需高 ROE 與強勁營收成長支撐，採分批小額建倉、保留後續加碼子彈。';
+      } else if (curPe < 25) {
+        pePill.textContent = `當前 PE：${curPe.toFixed(1)}x（20x–24.9x 持有／達標觀察區）`;
+        pePill.className = 'px-2.5 py-0.5 rounded-full font-bold bg-orange-100 text-orange-800';
+        adviceEl.textContent = '已超過 20 倍成長股買進上限，不建議大舉追買；既有部位可依每月營收與季報存貨繼續追蹤，接近目標價可準備分批停利。';
+      } else {
+        pePill.textContent = `當前 PE：${curPe.toFixed(1)}x（≥25x 過熱透支警戒區）`;
+        pePill.className = 'px-2.5 py-0.5 rounded-full font-bold bg-rose-100 text-rose-800';
+        adviceEl.textContent = '進入簡報 P.08「25–30 倍過熱警戒區」與 P.30「估值極度過高」退場區！價格已透支未來數年成長，應執行 50% / 30% / 20% 分批賣出。';
+      }
+
+      // Position sizing
+      const growth = Number(document.getElementById('pos-growth').value) || 3;
+      const peace = Number(document.getElementById('pos-peace').value) || 3;
+      document.getElementById('pos-growth-val').textContent = `${growth} / 5`;
+      document.getElementById('pos-peace-val').textContent = `${peace} / 5`;
+
+      const { total, tempC } = computeSignals();
+      const regime = getRegimeInfo(total, tempC);
+      const capRef = Math.max(0, Number(document.getElementById('res-capital').value) || 1000);
+      // Max single-stock allocation capped dynamically by regime eqMid
+      const singlePct = Math.round(((growth + peace) / 10) * Math.min(35, regime.eqMid * 0.45));
+      const singleMaxAmt = Math.round(capRef * (singlePct / 100));
+      document.getElementById('pos-result-box').innerHTML = `
+        <div class="font-bold text-indigo-900">建議單一標的最高部位上限：佔總資金 <strong>${singlePct}%</strong>（約 <strong>${singleMaxAmt.toLocaleString()} 萬</strong>）</div>
+        <div class="text-slate-700">依簡報 P.27 &amp; P.40「分批加碼防禦邏輯」拆解投入：</div>
+        <div class="grid grid-cols-3 gap-2 text-center pt-1">
+          <div class="p-2 rounded-lg bg-white border border-indigo-200"><div class="text-[10px] text-slate-500">第 1 批試單 (25%)</div><strong>${Math.round(singleMaxAmt * 0.25).toLocaleString()} 萬</strong></div>
+          <div class="p-2 rounded-lg bg-white border border-indigo-200"><div class="text-[10px] text-slate-500">第 2 批確認 (40%)</div><strong>${Math.round(singleMaxAmt * 0.40).toLocaleString()} 萬</strong></div>
+          <div class="p-2 rounded-lg bg-white border border-indigo-200"><div class="text-[10px] text-slate-500">第 3 批趨勢 (35%)</div><strong>${Math.round(singleMaxAmt * 0.35).toLocaleString()} 萬</strong></div>
+        </div>
+      `;
+
+      // Exit calculator
+      const exitPos = Math.max(0, Number(document.getElementById('exit-position-val').value) || 0);
+      const b1 = Math.round(exitPos * 0.50);
+      const b2 = Math.round(exitPos * 0.30);
+      const b3 = Math.max(0, exitPos - b1 - b2);
+      document.getElementById('exit-b1').textContent = `${b1.toLocaleString()} 萬`;
+      document.getElementById('exit-b2').textContent = `${b2.toLocaleString()} 萬`;
+      document.getElementById('exit-b3').textContent = `${b3.toLocaleString()} 萬`;
+      document.getElementById('exit-cash-back').textContent = `${(b1 + b2).toLocaleString()} 萬`;
+
+      const exitChecks = Array.from(document.querySelectorAll('.exit-check'));
+      const exitTriggered = exitChecks.filter(c => c.checked).length;
+      const exitBadge = document.getElementById('exit-trigger-badge');
+      if (exitChecks[0].checked) {
+        exitBadge.textContent = '🚨 基本面惡化：建議清倉退場';
+        exitBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800';
+      } else if (exitTriggered > 0) {
+        exitBadge.textContent = `⚠️ 已觸發 ${exitTriggered} 項退場條件：執行分批賣出`;
+        exitBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800';
+      } else {
+        exitBadge.textContent = '尚未觸發退場條件・續抱監控';
+        exitBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800';
+      }
+    }
+
+    // ------------------------------------------------------------------
+    // 5. WIWYNN CASE STUDY CHART (P.37 & P.45)
+    // ------------------------------------------------------------------
+    function renderWiwynnCaseChart() {
+      const ctx = document.getElementById('wiwynnCaseChart').getContext('2d');
+      if (wiwynnChart) return;
+      wiwynnChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['2021', '2022', '2023', '2024', '2025'],
+          datasets: [
+            {
+              type: 'bar',
+              label: '年度 EPS (元，左軸)',
+              data: [49.46, 81.07, 68.88, 126.57, 275.06],
+              backgroundColor: 'rgba(79, 70, 229, 0.78)',
+              borderRadius: 6,
+              yAxisID: 'y'
+            },
+            {
+              type: 'line',
+              label: 'ROE (% ，右軸)',
+              data: [33.34, 42.85, 29.73, 34.92, 48.03],
+              borderColor: '#f59e0b',
+              backgroundColor: '#f59e0b',
+              borderWidth: 2.5,
+              tension: 0.25,
+              yAxisID: 'y1'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+          scales: {
+            y: { beginAtZero: true, title: { display: true, text: 'EPS (元)', font: { size: 11 } } },
+            y1: { position: 'right', min: 20, max: 55, grid: { drawOnChartArea: false }, title: { display: true, text: 'ROE (%)', font: { size: 11 } } }
+          }
+        }
+      });
+    }
+
+    // ------------------------------------------------------------------
+    // INPUT SYNC, PRESETS & EXPORT index.html
+    // ------------------------------------------------------------------
+    function syncDomFromState() {
+      document.getElementById('in-tsmc-price').value = state.tsmcPrice;
+      document.getElementById('in-tsmc-eps').value = state.tsmcEps;
+      document.getElementById('in-margin-bal').value = state.marginBal;
+      document.getElementById('in-four-loans').value = state.fourLoans;
+      document.getElementById('in-king-price').value = state.kingPrice;
+      document.getElementById('in-1k-count').value = state.count1k;
+
+      document.querySelectorAll('.sig-check').forEach(cb => {
+        cb.checked = !!state.sigChecks[cb.dataset.sig];
+      });
+      document.querySelectorAll('.flt-check').forEach(cb => {
+        cb.checked = !!state.filterChecks[cb.dataset.id];
+      });
+      document.querySelectorAll('.moat-slider').forEach(sl => {
+        const idx = Number(sl.dataset.idx);
+        sl.value = state.moatScores[idx];
+        document.getElementById(`moat-v-${idx + 1}`).textContent = state.moatScores[idx];
+      });
+      document.querySelectorAll('.mon-check').forEach(cb => {
+        cb.checked = !!state.monChecks[cb.dataset.mon];
+      });
+      document.querySelectorAll('.exit-check').forEach(cb => {
+        cb.checked = !!state.exitChecks[cb.dataset.exit];
+      });
+
+      const checkedSigCount = document.querySelectorAll('.sig-check:checked').length;
+      document.getElementById('checklist-progress-badge').textContent = `已人工覆核 ${checkedSigCount} / 7 項`;
+
+      const monCount = document.querySelectorAll('.mon-check:checked').length;
+      document.getElementById('mon-progress').textContent = `${monCount} / 5 項`;
+    }
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabName));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('hidden', p.id !== `tab-${tabName}`));
+      if (tabName === 'thermometer') {
+        if (gaugeChart) gaugeChart.resize();
+        if (signalsChart) signalsChart.resize();
+      }
+      if (tabName === 'case') {
+        renderWiwynnCaseChart();
+        if (wiwynnChart) wiwynnChart.resize();
+      }
+      if (tabName === 'reservoir') {
+        renderReservoirViews();
+        if (reservoirChart) reservoirChart.resize();
+      }
+      if (tabName === 'filter') {
+        renderFilterViews();
+        if (moatRadarChart) moatRadarChart.resize();
+      }
+      if (tabName === 'valuation') renderValuationAndExit();
+    }
+
+    function downloadAsIndexHtml() {
+      const clone = document.documentElement.cloneNode(true);
+      clone.querySelectorAll('canvas').forEach(c => {
+        c.removeAttribute('style');
+        c.removeAttribute('width');
+        c.removeAttribute('height');
+      });
+      clone.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === 'thermometer'));
+      clone.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('hidden', p.id !== 'tab-thermometer'));
+      const toastEl = clone.querySelector('#toast');
+      if (toastEl) toastEl.classList.add('hidden');
+
+      const htmlStr = '<!DOCTYPE html>\n' + clone.outerHTML;
+      const blob = new Blob([htmlStr], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'index.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('已匯出 index.html，可依指南上傳至 GitHub Pages 並嵌入 Notion！');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      syncDomFromState();
+
+      // Tabs & Jumpers
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
+      document.querySelectorAll('[data-jump]').forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.jump)));
+
+      // Presets
+      document.getElementById('btn-preset-730').addEventListener('click', () => {
+        Object.assign(state, PRESET_730_PEAK);
+        saveState();
+        syncDomFromState();
+        renderThermometerViews();
+        renderValuationAndExit();
+        showToast('已載入 7/30 公開課過熱峰值 (7/7 燈 · 110°C)');
+      });
+
+      document.getElementById('btn-reset-live').addEventListener('click', () => {
+        Object.assign(state, PRESET_LIVE_1119);
+        saveState();
+        syncDomFromState();
+        renderThermometerViews();
+        renderValuationAndExit();
+        showToast('已重置為 2026-11-19 台股去槓桿後實況');
+      });
+
+      document.getElementById('btn-download-index').addEventListener('click', downloadAsIndexHtml);
+
+      // Signal numeric inputs
+      const bindNum = (id, key) => {
+        document.getElementById(id).addEventListener('input', e => {
+          const v = parseFloat(e.target.value);
+          if (Number.isFinite(v)) {
+            state[key] = v;
+            state.label = '自訂即時模擬';
+            saveState();
+            renderThermometerViews();
+          }
+        });
+      };
+      bindNum('in-tsmc-price', 'tsmcPrice');
+      bindNum('in-tsmc-eps', 'tsmcEps');
+      bindNum('in-margin-bal', 'marginBal');
+      bindNum('in-king-price', 'kingPrice');
+      bindNum('in-1k-count', 'count1k');
+
+      document.getElementById('in-four-loans').addEventListener('change', e => {
+        state.fourLoans = e.target.value;
+        state.label = '自訂即時模擬';
+        saveState();
+        renderThermometerViews();
+      });
+
+      // Segmented buttons (signals 2, 5, 6, 7)
+      document.querySelectorAll('.sig-seg-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const sig = btn.dataset.sig;
+          const score = Number(btn.dataset.score);
+          state[`sig${sig}Score`] = score;
+          state.label = '自訂即時模擬';
+          saveState();
+          renderThermometerViews();
+        });
+      });
+
+      // Checkboxes (7 signals)
+      document.querySelectorAll('.sig-check').forEach(cb => {
+        cb.addEventListener('change', () => {
+          state.sigChecks[cb.dataset.sig] = cb.checked;
+          saveState();
+          const checkedSigCount = document.querySelectorAll('.sig-check:checked').length;
+          document.getElementById('checklist-progress-badge').textContent = `已人工覆核 ${checkedSigCount} / 7 項`;
+        });
+      });
+
+      // Tab 2: Reservoir inputs & buttons
+      ['res-capital', 'res-stock', 'res-cash', 'res-debt-margin', 'res-debt-pledge', 'res-debt-credit', 'res-debt-mortgage'].forEach(id => {
+        document.getElementById(id).addEventListener('input', () => {
+          renderReservoirViews();
+          renderValuationAndExit();
+        });
+      });
+
+      document.getElementById('btn-res-safe').addEventListener('click', () => {
+        document.getElementById('res-capital').value = 1000;
+        document.getElementById('res-stock').value = 650;
+        document.getElementById('res-cash').value = 350;
+        document.getElementById('res-debt-margin').value = 0;
+        document.getElementById('res-debt-pledge').value = 0;
+        document.getElementById('res-debt-credit').value = 0;
+        document.getElementById('res-debt-mortgage').value = 0;
+        renderReservoirViews();
+        showToast('已載入無槓桿穩健示範 (650 萬股 / 350 萬現金)');
+      });
+
+      document.getElementById('btn-res-fourloans').addEventListener('click', () => {
+        document.getElementById('res-capital').value = 850;
+        document.getElementById('res-stock').value = 1600;
+        document.getElementById('res-cash').value = 50;
+        document.getElementById('res-debt-margin').value = 500;
+        document.getElementById('res-debt-pledge').value = 500;
+        document.getElementById('res-debt-credit').value = 100;
+        document.getElementById('res-debt-mortgage').value = 200;
+        renderReservoirViews();
+        showToast('已模擬「四貸同堂」高槓桿壓力情境');
+      });
+
+      document.getElementById('btn-res-match-temp').addEventListener('click', () => {
+        const cap = Math.max(0, Number(document.getElementById('res-capital').value) || 1000);
+        const { total, tempC } = computeSignals();
+        const regime = getRegimeInfo(total, tempC);
+        document.getElementById('res-stock').value = Math.round(cap * (regime.eqMid / 100));
+        document.getElementById('res-cash').value = Math.round(cap * (regime.cashMid / 100));
+        document.getElementById('res-debt-margin').value = 0;
+        document.getElementById('res-debt-pledge').value = 0;
+        document.getElementById('res-debt-credit').value = 0;
+        document.getElementById('res-debt-mortgage').value = 0;
+        renderReservoirViews();
+        showToast(`已依「${regime.name}」自動切分資金 (${regime.eqMid}% 股 / ${regime.cashMid}% 現金)`);
+      });
+
+      // Tab 3: Filter checkboxes, sliders & presets
+      document.querySelectorAll('.flt-check').forEach(cb => {
+        cb.addEventListener('change', () => {
+          state.filterChecks[cb.dataset.id] = cb.checked;
+          saveState();
+          renderFilterViews();
+        });
+      });
+
+      document.querySelectorAll('.moat-slider').forEach(sl => {
+        sl.addEventListener('input', () => {
+          const idx = Number(sl.dataset.idx);
+          state.moatScores[idx] = Number(sl.value);
+          document.getElementById(`moat-v-${idx + 1}`).textContent = sl.value;
+          saveState();
+          renderFilterViews();
+        });
+      });
+
+      document.querySelectorAll('.filter-preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const mode = btn.dataset.filterPreset;
+          if (mode === 'wiwynn') {
+            document.getElementById('flt-target-name').value = '緯穎 (6669)';
+            document.querySelectorAll('.flt-check').forEach(cb => {
+              cb.checked = cb.dataset.id !== 'q2';
+              state.filterChecks[cb.dataset.id] = cb.checked;
+            });
+            state.moatScores = [5, 4, 4, 5, 4, 5];
+          } else if (mode === 'tsmc') {
+            document.getElementById('flt-target-name').value = '台積電 (2330)';
+            document.querySelectorAll('.flt-check').forEach(cb => {
+              cb.checked = cb.dataset.id !== 'f4';
+              state.filterChecks[cb.dataset.id] = cb.checked;
+            });
+            state.moatScores = [5, 4, 5, 5, 4, 5];
+          } else {
+            document.getElementById('flt-target-name').value = '自訂評估標的';
+            document.querySelectorAll('.flt-check').forEach(cb => {
+              cb.checked = false;
+              state.filterChecks[cb.dataset.id] = false;
+            });
+            state.moatScores = [3, 3, 3, 3, 3, 3];
+          }
+          saveState();
+          syncDomFromState();
+          renderFilterViews();
+        });
+      });
+
+      // Tab 4: Valuation, Position Sizing, Monitoring, Exit
+      ['val-price', 'val-eps', 'val-roe', 'val-target-pe', 'pos-growth', 'pos-peace', 'exit-position-val'].forEach(id => {
+        document.getElementById(id).addEventListener('input', renderValuationAndExit);
+      });
+
+      document.getElementById('btn-val-wiwynn').addEventListener('click', () => {
+        document.getElementById('val-name').value = '緯穎 (6669) 2025/05 進場時點';
+        document.getElementById('val-price').value = 2125;
+        document.getElementById('val-eps').value = 160;
+        document.getElementById('val-roe').value = 39;
+        document.getElementById('val-target-pe').value = 24;
+        renderValuationAndExit();
+        showToast('已帶入緯穎 (6669) 公開課實戰估值模型');
+      });
+
+      document.getElementById('btn-val-tsmc').addEventListener('click', () => {
+        document.getElementById('val-name').value = '台積電 (2330) 2026/11 實況';
+        document.getElementById('val-price').value = state.tsmcPrice;
+        document.getElementById('val-eps').value = state.tsmcEps;
+        document.getElementById('val-roe').value = 30;
+        document.getElementById('val-target-pe').value = 24;
+        renderValuationAndExit();
+        showToast('已帶入台積電 (2330) 最新估值實況');
+      });
+
+      document.querySelectorAll('.mon-check').forEach(cb => {
+        cb.addEventListener('change', () => {
+          state.monChecks[cb.dataset.mon] = cb.checked;
+          saveState();
+          document.getElementById('mon-progress').textContent = `${document.querySelectorAll('.mon-check:checked').length} / 5 項`;
+        });
+      });
+
+      document.querySelectorAll('.exit-check').forEach(cb => {
+        cb.addEventListener('change', () => {
+          state.exitChecks[cb.dataset.exit] = cb.checked;
+          saveState();
+          renderValuationAndExit();
+        });
+      });
+
+      // Initial render across all panels
+      renderThermometerViews();
+      renderFilterViews();
+      renderValuationAndExit();
+      renderWiwynnCaseChart();
+    });
+  </script>
+</body>
+</html>
